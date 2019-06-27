@@ -40,6 +40,16 @@ julia> Base.add_sum(Identity(Base.add_sum), 1)
 
 julia> Base.mul_prod(Identity(Base.mul_prod), 1)
 1
+
+julia> using BangBang: push!!, append!!
+
+julia> push!!(Identity(push!!), 1.0)
+1-element Array{Float64,1}:
+ 1.0
+
+julia> append!!(Identity(append!!), [1.0])
+1-element Array{Float64,1}:
+ 1.0
 ```
 
 Method ambiguities are tested using [Aqua.jl](https://github.com/tkf/Aqua.jl).

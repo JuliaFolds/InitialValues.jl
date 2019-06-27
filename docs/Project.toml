@@ -1,3 +1,4 @@
 [deps]
+BangBang = "198e06fe-97b7-11e9-32a5-e1d131e6ad66"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 UniversalIdentity = "b8f959e8-97da-11e9-3356-bb6559ac5c1b"
