@@ -3,6 +3,7 @@
 ```@index
 ```
 
-```@autodocs
-Modules = [UniversalIdentity]
+```@docs
+UniversalIdentity
+UniversalIdentity.Identity
 ```

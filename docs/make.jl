@@ -9,7 +9,6 @@ makedocs(;
     repo="https://github.com/tkf/UniversalIdentity.jl/blob/{commit}{path}#L{line}",
     sitename="UniversalIdentity.jl",
     authors="Takafumi Arakaki <aka.tkf@gmail.com>",
-    assets=String[],
 )
 
 deploydocs(;

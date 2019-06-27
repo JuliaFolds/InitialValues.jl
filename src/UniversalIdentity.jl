@@ -1,7 +1,32 @@
 module UniversalIdentity
 
+# Use README as the docstring of the module:
+@doc let path = joinpath(dirname(@__DIR__), "README.md")
+    include_dependency(path)
+    replace(read(path, String), "```julia" => "```jldoctest README")
+end UniversalIdentity
+
 using Requires
 
+"""
+    Identity(op)
+
+A generic (left) identity for `op`.
+
+# Examples
+```jldoctest
+julia> using UniversalIdentity: Identity
+
+julia> Identity(*) * 1
+1
+
+julia> Identity(*) * :actual_anything_works
+:actual_anything_works
+
+julia> foldl(+, 1:3, init=Identity(+))
+6
+```
+"""
 struct Identity{OP} end
 
 Identity(::OP) where OP = Identity{OP}()
