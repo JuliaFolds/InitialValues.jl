@@ -20,6 +20,12 @@ julia> using UniversalIdentity: Identity
 julia> Identity(*) * 1
 1
 
+julia> Identity(*) * missing
+missing
+
+julia> Identity(*) * "right"
+"right"
+
 julia> Identity(*) * :actual_anything_works
 :actual_anything_works
 
