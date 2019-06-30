@@ -8,6 +8,8 @@ end UniversalIdentity
 
 using Requires
 
+include("prettyexpr.jl")
+
 """
     Identity(op)
 
@@ -37,25 +39,102 @@ struct Identity{OP} end
 
 Identity(::OP) where OP = Identity{OP}()
 
-itypeof(f) = typeof(Identity(f))
+itypeof_impl(op) = :(typeof(Identity($op)))
+@eval itypeof(op) = $(itypeof_impl(:op))
 
-Base.:*(::itypeof(*), x) = x
-Base.:+(::itypeof(+), x) = x
-Base.:&(::itypeof(&), x) = x
-Base.:|(::itypeof(|), x) = x
-Base.min(::itypeof(min), x) = x
-Base.max(::itypeof(max), x) = x
-Base.add_sum(::itypeof(Base.add_sum), x) = x
-Base.mul_prod(::itypeof(Base.mul_prod), x) = x
+"""
+    UniversalIdentity.hasidentity(op) :: Bool
 
-# Disambiguation:
-Base.min(::itypeof(min), ::Missing) = missing
-Base.max(::itypeof(max), ::Missing) = missing
+# Examples
+```jldoctest
+julia> using UniversalIdentity
+
+julia> all(UniversalIdentity.hasidentity, [
+           *,
+           +,
+           &,
+           |,
+           min,
+           max,
+           Base.add_sum,
+           Base.mul_prod,
+       ])
+true
+
+julia> UniversalIdentity.hasidentity((x, y) -> x + y)
+false
+```
+"""
+hasidentity(::Any) = false
+
+def_impl(op, y) =
+    quote
+        $op(::$(itypeof_impl(op)), x) = $y
+        UniversalIdentity.hasidentity(::typeof($op)) = true
+    end
+
+"""
+    UniversalIdentity.@def op [y = :x]
+
+Define a generic (left) identity for `op`.
+
+`UniversalIdentity.@def op` is expanded to
+
+```julia
+$(prettyexpr(def_impl(:op, :x)))
+```
+
+For operations like `push!`, it is useful to define the returned value
+to be different from `x`.  This can be done by using the second
+argument to the maco; i.e., `UniversalIdentity.@def op [x]` is
+expanded to
+
+```julia
+$(prettyexpr(def_impl(:push!, "[x]")))
+```
+
+Note that the second argument to `op` is always `x`.
+"""
+macro def(op, y = :x)
+    def_impl(esc(op), y)
+end
+
+disambiguate_impl(op, right) =
+    quote
+        $op(::$(itypeof_impl(op)), x::$right) = x
+    end
+
+"""
+    UniversalIdentity.@disambiguate op RightType
+
+Disambiguate the method introduced by [`@def`](@ref).
+
+It is expanded to
+
+```julia
+$(prettyexpr(disambiguate_impl(:op, :RightType)))
+```
+"""
+macro disambiguate(op, right)
+    disambiguate_impl(esc(op), esc(right))
+end
+
+@def Base.:*
+@def Base.:+
+@def Base.:&
+@def Base.:|
+@def Base.min
+@def Base.max
+@def Base.add_sum
+@def Base.mul_prod
+
+@disambiguate Base.min Missing
+@disambiguate Base.max Missing
 
 function __init__()
     @require BangBang="198e06fe-97b7-11e9-32a5-e1d131e6ad66" begin
-        BangBang.push!!(::itypeof(BangBang.push!!), x) = [x]
-        BangBang.append!!(::itypeof(BangBang.append!!), x) = x
+        @def BangBang.push!! [x]
+        @def BangBang.append!!
     end
 end
 
