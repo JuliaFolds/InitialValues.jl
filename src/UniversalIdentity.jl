@@ -6,38 +6,52 @@ module UniversalIdentity
     replace(read(path, String), "```julia" => "```jldoctest README")
 end UniversalIdentity
 
-include("prettyexpr.jl")
+export Id
 
 """
-    Identity(op)
+    Id(op) :: Identity
 
 A generic (left) identity for `op`.
 
 # Examples
 ```jldoctest
-julia> using UniversalIdentity: Identity
+julia> using UniversalIdentity
 
-julia> Identity(*) * 1
+julia> Id(*) isa UniversalIdentity.Identity
+true
+
+julia> Id(*) * 1
 1
 
-julia> Identity(*) * missing
+julia> Id(*) * missing
 missing
 
-julia> Identity(*) * "right"
+julia> Id(*) * "right"
 "right"
 
-julia> Identity(*) * :actual_anything_works
+julia> Id(*) * :actual_anything_works
 :actual_anything_works
 
-julia> foldl(+, 1:3, init=Identity(+))
+julia> foldl(+, 1:3, init=Id(+))
 6
 ```
 """
-struct Identity{OP} end
+Id(::OP) where OP = IdentityOf{OP}()
 
-Identity(::OP) where OP = Identity{OP}()
+include("prettyexpr.jl")
 
-itypeof_impl(op) = :(typeof(Identity($op)))
+"""
+    UniversalIdentity.Identity
+
+An abstract super type of all identity types.
+"""
+abstract type Identity end
+abstract type SpecificIdentity{OP} <: Identity end
+# abstract type GenericIdentity <: AbstractIdentity end
+
+struct IdentityOf{OP} <: SpecificIdentity{OP} end
+
+itypeof_impl(op) = :(SpecificIdentity{typeof($op)})
 @eval itypeof(op) = $(itypeof_impl(:op))
 
 """
@@ -129,24 +143,25 @@ end
 @disambiguate Base.min Missing
 @disambiguate Base.max Missing
 
-Base.convert(
-    ::Type{T},
-    ::Union{Identity{typeof(+)}, Identity{typeof(Base.add_sum)}}
-) where {T <: Number} =
-    zero(T)
+const ZeroType = Union{
+    SpecificIdentity{typeof(+)},
+    SpecificIdentity{typeof(Base.add_sum)},
+}
+const OneType = Union{
+    SpecificIdentity{typeof(*)},
+    SpecificIdentity{typeof(Base.mul_prod)},
+}
 
-Base.convert(
-    ::Type{T},
-    ::Union{Identity{typeof(*)}, Identity{typeof(Base.mul_prod)}}
-) where {T <: Union{Number, AbstractString}} =
+Base.convert(::Type{T}, ::ZeroType) where {T <: Number} = zero(T)
+Base.convert(::Type{T}, ::OneType) where {T <: Union{Number, AbstractString}} =
     one(T)
 
 # Technically true, but could be a disaster in practice?:
 #=
-Base.convert(::Type{T}, ::Union{Identity{typeof(min)}}) where {T <: Number} =
+Base.convert(::Type{T}, ::Union{SpecificIdentity{typeof(min)}}) where {T <: Number} =
     typemax(T)
 
-Base.convert(::Type{T}, ::Union{Identity{typeof(max)}}) where {T <: Number} =
+Base.convert(::Type{T}, ::Union{SpecificIdentity{typeof(max)}}) where {T <: Number} =
     typemin(T)
 =#
 

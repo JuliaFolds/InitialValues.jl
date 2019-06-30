@@ -1,7 +1,7 @@
 module TestDef
 
 using Test
-using UniversalIdentity: Identity, hasidentity
+using UniversalIdentity: Id, hasidentity
 
 module CleanNameSpace
     using UniversalIdentity: @def
@@ -13,7 +13,7 @@ end
     add = CleanNameSpace.add
     @test !isdefined(CleanNameSpace, :UniversalIdentity)
     @test hasidentity(add)
-    @test add(Identity(add), :x) == :x
+    @test add(Id(add), :x) == :x
 end
 
 module NonFunction
@@ -28,7 +28,7 @@ end
     add = NonFunction.add
     @test !(add isa Function)
     @test hasidentity(add)
-    @test add(Identity(add), :x) == :x
+    @test add(Id(add), :x) == :x
 end
 
 end  # module
