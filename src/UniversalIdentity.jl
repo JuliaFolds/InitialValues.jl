@@ -10,6 +10,8 @@ using Requires
 
 include("prettyexpr.jl")
 
+abstract type AbstractIdentity end
+
 """
     Identity(op)
 
@@ -35,11 +37,13 @@ julia> foldl(+, 1:3, init=Identity(+))
 6
 ```
 """
-struct Identity{OP} end
+struct Identity{OP} <: AbstractIdentity end
 
 Identity(::OP) where OP = Identity{OP}()
 
-itypeof_impl(op) = :(typeof(Identity($op)))
+struct GenericIdentity <: AbstractIdentity end
+
+itypeof_impl(op) = :(Union{typeof(Identity($op)), GenericIdentity})
 @eval itypeof(op) = $(itypeof_impl(:op))
 
 """
