@@ -131,6 +131,27 @@ end
 @disambiguate Base.min Missing
 @disambiguate Base.max Missing
 
+Base.convert(
+    ::Type{T},
+    ::Union{Identity{typeof(+)}, Identity{typeof(Base.add_sum)}}
+) where {T <: Number} =
+    zero(T)
+
+Base.convert(
+    ::Type{T},
+    ::Union{Identity{typeof(*)}, Identity{typeof(Base.mul_prod)}}
+) where {T <: Union{Number, AbstractString}} =
+    one(T)
+
+# Technically true, but could be a disaster in practice?:
+#=
+Base.convert(::Type{T}, ::Union{Identity{typeof(min)}}) where {T <: Number} =
+    typemax(T)
+
+Base.convert(::Type{T}, ::Union{Identity{typeof(max)}}) where {T <: Number} =
+    typemin(T)
+=#
+
 function __init__()
     @require BangBang="198e06fe-97b7-11e9-32a5-e1d131e6ad66" begin
         @def BangBang.push!! [x]
