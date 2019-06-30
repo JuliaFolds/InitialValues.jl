@@ -3,9 +3,6 @@ uuid = "b8f959e8-97da-11e9-3356-bb6559ac5c1b"
 authors = ["Takafumi Arakaki <aka.tkf@gmail.com>"]
 version = "0.1.0"
 
-[deps]
-Requires = "ae029012-a4dd-5104-9daa-d747884805df"
-
 [compat]
 julia = "1.1"
 

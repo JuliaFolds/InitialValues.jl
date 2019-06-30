@@ -6,8 +6,6 @@ module UniversalIdentity
     replace(read(path, String), "```julia" => "```jldoctest README")
 end UniversalIdentity
 
-using Requires
-
 include("prettyexpr.jl")
 
 """
@@ -151,12 +149,5 @@ Base.convert(::Type{T}, ::Union{Identity{typeof(min)}}) where {T <: Number} =
 Base.convert(::Type{T}, ::Union{Identity{typeof(max)}}) where {T <: Number} =
     typemin(T)
 =#
-
-function __init__()
-    @require BangBang="198e06fe-97b7-11e9-32a5-e1d131e6ad66" begin
-        @def BangBang.push!! [x]
-        @def BangBang.append!!
-    end
-end
 
 end # module
