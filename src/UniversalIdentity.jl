@@ -83,12 +83,29 @@ julia> UniversalIdentity.hasidentity((x, y) -> x + y)
 false
 ```
 """
-hasidentity(::Any) = false
+hasidentity(::OP) where OP = hasidentity(OP)
+hasidentity(::Type) = false
+
+"""
+    UniversalIdentity.isknown(::Identity) :: Bool
+
+# Examples
+```jldoctest
+julia> using UniversalIdentity
+
+julia> UniversalIdentity.isknown(Id(+))
+true
+
+julia> UniversalIdentity.isknown(Id((x, y) -> x + y))
+false
+```
+"""
+isknown(::SpecificIdentity{OP}) where OP = hasidentity(OP)
 
 def_impl(op, y) =
     quote
         $op(::$(itypeof_impl(op)), x) = $y
-        UniversalIdentity.hasidentity(::typeof($op)) = true
+        UniversalIdentity.hasidentity(::Type{typeof($op)}) = true
     end
 
 """

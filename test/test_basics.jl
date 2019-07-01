@@ -2,9 +2,21 @@ module TestBasics
 
 using Test
 using UniversalIdentity
+using UniversalIdentity: isknown, hasidentity
+
 
 @testset for op in [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
     @test op(Id(op), :anything) === :anything
+    @test hasidentity(op)
+    @test hasidentity(typeof(op))
+    @test isknown(Id(op))
+end
+
+@testset "hasidentity" begin
+    @test !hasidentity(-)
+    @test !hasidentity(typeof(-))
+    @test !hasidentity(Int)
+    @test !hasidentity(Type{Int})
 end
 
 @testset "missing" begin
