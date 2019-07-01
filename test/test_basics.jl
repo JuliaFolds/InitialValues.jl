@@ -31,11 +31,11 @@ end
         @test float(Id(Base.add_sum)) === 0.0
         @test float(Id(Base.mul_prod)) === 1.0
     end
-    @testset "Int" begin
-        @test Int(Id(+)) === 0
-        @test Int(Id(*)) === 1
-        @test Int(Id(Base.add_sum)) === 0
-        @test Int(Id(Base.mul_prod)) === 1
+    @testset "Integer" begin
+        @test Integer(Id(+)) === 0
+        @test Integer(Id(*)) === 1
+        @test Integer(Id(Base.add_sum)) === 0
+        @test Integer(Id(Base.mul_prod)) === 1
     end
     @testset for T in [
         Int,

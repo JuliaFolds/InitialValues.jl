@@ -177,8 +177,8 @@ const OneType = Union{
 
 Base.float(::ZeroType) = 0.0
 Base.float(::OneType) = 1.0
-Base.Int(::ZeroType) = 0
-Base.Int(::OneType) = 1
+Base.Integer(::ZeroType) = 0
+Base.Integer(::OneType) = 1
 
 Base.convert(::Type{T}, ::ZeroType) where {T <: Number} = zero(T)
 Base.convert(::Type{T}, ::OneType) where {T <: Union{Number, AbstractString}} =
