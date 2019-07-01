@@ -13,6 +13,18 @@ end
 end
 
 @testset "convert" begin
+    @testset "float" begin
+        @test float(Id(+)) === 0.0
+        @test float(Id(*)) === 1.0
+        @test float(Id(Base.add_sum)) === 0.0
+        @test float(Id(Base.mul_prod)) === 1.0
+    end
+    @testset "Int" begin
+        @test Int(Id(+)) === 0
+        @test Int(Id(*)) === 1
+        @test Int(Id(Base.add_sum)) === 0
+        @test Int(Id(Base.mul_prod)) === 1
+    end
     @testset for T in [
         Int,
         UInt8,
