@@ -38,7 +38,7 @@ julia> foldl(+, 1:3, init=Id(+))
 julia> float(Id(*))
 1.0
 
-julia> Int(Id(+))
+julia> Integer(Id(+))
 0
 ```
 """

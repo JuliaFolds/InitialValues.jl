@@ -8,37 +8,37 @@
 [![Aqua QA](https://img.shields.io/badge/Aqua.jl-%F0%9F%8C%A2-aqua.svg)](https://github.com/tkf/Aqua.jl)
 
 ```julia
-julia> using UniversalIdentity: Identity
+julia> using UniversalIdentity
 
-julia> Identity(+) + 1
+julia> Id(+) + 1
 1
 
-julia> foldl(+, 1:3, init=Identity(+))
+julia> foldl(+, 1:3, init=Id(+))
 6
 ```
 
 Following methods are defined:
 
 ```julia
-julia> Identity(*) * 1
+julia> Id(*) * 1
 1
 
-julia> Identity(&) & 1
+julia> Id(&) & 1
 1
 
-julia> Identity(|) | 1
+julia> Id(|) | 1
 1
 
-julia> min(Identity(min), 1)
+julia> min(Id(min), 1)
 1
 
-julia> max(Identity(max), 1)
+julia> max(Id(max), 1)
 1
 
-julia> Base.add_sum(Identity(Base.add_sum), 1)
+julia> Base.add_sum(Id(Base.add_sum), 1)
 1
 
-julia> Base.mul_prod(Identity(Base.mul_prod), 1)
+julia> Base.mul_prod(Id(Base.mul_prod), 1)
 1
 ```
 

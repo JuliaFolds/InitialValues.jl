@@ -5,8 +5,10 @@
 
 ```@docs
 UniversalIdentity
-UniversalIdentity.Identity
-UniversalIdentity.hasidentity
+UniversalIdentity.Id
 UniversalIdentity.@def
 UniversalIdentity.@disambiguate
+UniversalIdentity.hasidentity
+UniversalIdentity.isknown
+UniversalIdentity.Identity
 ```
