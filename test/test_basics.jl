@@ -12,6 +12,21 @@ using UniversalIdentity: isknown, hasidentity
     @test isknown(Id(op))
 end
 
+@testset "show" begin
+    @testset "$desired" for (op, desired) in [
+        (+, "Id(+)"),
+        (*, "Id(*)"),
+        (|, "Id(|)"),
+        (&, "Id(&)"),
+        (min, "Id(min)"),
+        (max, "Id(max)"),
+    ]
+        @test repr(Id(op); context=:limit => true) == desired
+        @test repr(Id(op)) == "UniversalIdentity.$desired"
+        @test string(Id(op)) == "UniversalIdentity.$desired"
+    end
+end
+
 @testset "hasidentity" begin
     @test !hasidentity(-)
     @test !hasidentity(typeof(-))

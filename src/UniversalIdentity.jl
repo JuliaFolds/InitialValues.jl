@@ -57,6 +57,19 @@ abstract type SpecificIdentity{OP} <: Identity end
 
 struct IdentityOf{OP} <: SpecificIdentity{OP} end
 
+function Base.show(io::IO, ::IdentityOf{OP}) where {OP}
+    if !get(io, :limit, false)
+        # Don't show full name in REPL etc.:
+        print(io, "UniversalIdentity.")
+    end
+    op = string(OP)
+    if startswith(op, "typeof(") && endswith(op, ")")
+        print(io, "Id(", op[length("typeof(") + 1 : end - length(")")], ")")
+    else
+        print(io, "Id(::", op, ")")
+    end
+end
+
 itypeof_impl(op) = :(SpecificIdentity{typeof($op)})
 @eval itypeof(op) = $(itypeof_impl(:op))
 
