@@ -147,24 +147,24 @@ macro def(op, y = :x)
     def_impl(esc(op), y)
 end
 
-disambiguate_impl(op, right) =
+disambiguate_impl(op, right, y) =
     quote
-        $op(::$(itypeof_impl(op)), x::$right) = x
+        $op(::$(itypeof_impl(op)), x::$right) = $y
     end
 
 """
-    UniversalIdentity.@disambiguate op RightType
+    UniversalIdentity.@disambiguate op RightType [y = :x]
 
 Disambiguate the method introduced by [`@def`](@ref).
 
 It is expanded to
 
 ```julia
-$(prettyexpr(disambiguate_impl(:op, :RightType)))
+$(prettyexpr(disambiguate_impl(:op, :RightType, :x)))
 ```
 """
-macro disambiguate(op, right)
-    disambiguate_impl(esc(op), esc(right))
+macro disambiguate(op, right, y = :x)
+    disambiguate_impl(esc(op), esc(right), y)
 end
 
 @def Base.:*

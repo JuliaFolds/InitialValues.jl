@@ -32,7 +32,7 @@ eq(x, y) = normalize(x) == normalize(y)
     ),
     (
         label = "disambiguate_impl",
-        ex = disambiguate_impl(:op, :RightType),
+        ex = disambiguate_impl(:op, :RightType, :x),
     ),
 ]
     code = prettyexpr(ex)
