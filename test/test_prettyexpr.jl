@@ -28,11 +28,11 @@ eq(x, y) = normalize(x) == normalize(y)
     ),
     (
         label = "def_impl",
-        ex = def_impl(:op, :y),
+        ex = def_impl(:op, :x, :y),
     ),
     (
         label = "disambiguate_impl",
-        ex = disambiguate_impl(:op, :RightType, :x),
+        ex = disambiguate_impl(:op, :RightType, :x, :x),
     ),
 ]
     code = prettyexpr(ex)

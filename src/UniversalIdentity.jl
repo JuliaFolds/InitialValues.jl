@@ -115,9 +115,9 @@ false
 """
 isknown(::SpecificIdentity{OP}) where OP = hasidentity(OP)
 
-def_impl(op, y) =
+def_impl(op, x, y) =
     quote
-        $op(::$(itypeof_impl(op)), x) = $y
+        $op(::$(itypeof_impl(op)), $x) = $y
         UniversalIdentity.hasidentity(::Type{typeof($op)}) = true
     end
 
@@ -129,7 +129,7 @@ Define a generic (left) identity for `op`.
 `UniversalIdentity.@def op` is expanded to
 
 ```julia
-$(prettyexpr(def_impl(:op, :x)))
+$(prettyexpr(def_impl(:op, :x, :x)))
 ```
 
 For operations like `push!`, it is useful to define the returned value
@@ -138,18 +138,18 @@ argument to the maco; i.e., `UniversalIdentity.@def op [x]` is
 expanded to
 
 ```julia
-$(prettyexpr(def_impl(:push!, "[x]")))
+$(prettyexpr(def_impl(:push!, :x, "[x]")))
 ```
 
 Note that the second argument to `op` is always `x`.
 """
 macro def(op, y = :x)
-    def_impl(esc(op), y)
+    def_impl(esc(op), esc(:x), esc(y))
 end
 
-disambiguate_impl(op, right, y) =
+disambiguate_impl(op, right, x, y) =
     quote
-        $op(::$(itypeof_impl(op)), x::$right) = $y
+        $op(::$(itypeof_impl(op)), $x::$right) = $y
     end
 
 """
@@ -160,11 +160,11 @@ Disambiguate the method introduced by [`@def`](@ref).
 It is expanded to
 
 ```julia
-$(prettyexpr(disambiguate_impl(:op, :RightType, :x)))
+$(prettyexpr(disambiguate_impl(:op, :RightType, :x, :x)))
 ```
 """
 macro disambiguate(op, right, y = :x)
-    disambiguate_impl(esc(op), esc(right), y)
+    disambiguate_impl(esc(op), esc(right), esc(:x), esc(y))
 end
 
 @def Base.:*
