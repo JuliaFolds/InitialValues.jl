@@ -2,13 +2,13 @@ module TestBangBang
 
 using Test
 using BangBang
-using UniversalIdentity: Id, hasidentity
+using Initials: Init, hasinitial
 
 @testset begin
-    @test hasidentity(push!!)
-    @test hasidentity(append!!)
-    @test push!!(Id(push!!), 1) == [1]
-    @test append!!(Id(append!!), [1]) == [1]
+    @test hasinitial(push!!)
+    @test hasinitial(append!!)
+    @test push!!(Init(push!!), 1) == [1]
+    @test append!!(Init(append!!), [1]) == [1]
 end
 
 end  # module
