@@ -1,14 +1,14 @@
-# UniversalIdentity
+# Initials
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://tkf.github.io/UniversalIdentity.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://tkf.github.io/UniversalIdentity.jl/dev)
-[![Build Status](https://travis-ci.com/tkf/UniversalIdentity.jl.svg?branch=master)](https://travis-ci.com/tkf/UniversalIdentity.jl)
-[![Codecov](https://codecov.io/gh/tkf/UniversalIdentity.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/tkf/UniversalIdentity.jl)
-[![Coveralls](https://coveralls.io/repos/github/tkf/UniversalIdentity.jl/badge.svg?branch=master)](https://coveralls.io/github/tkf/UniversalIdentity.jl?branch=master)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://tkf.github.io/Initials.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://tkf.github.io/Initials.jl/dev)
+[![Build Status](https://travis-ci.com/tkf/Initials.jl.svg?branch=master)](https://travis-ci.com/tkf/Initials.jl)
+[![Codecov](https://codecov.io/gh/tkf/Initials.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/tkf/Initials.jl)
+[![Coveralls](https://coveralls.io/repos/github/tkf/Initials.jl/badge.svg?branch=master)](https://coveralls.io/github/tkf/Initials.jl?branch=master)
 [![Aqua QA](https://img.shields.io/badge/Aqua.jl-%F0%9F%8C%A2-aqua.svg)](https://github.com/tkf/Aqua.jl)
 
 ```julia
-julia> using UniversalIdentity
+julia> using Initials
 
 julia> Id(+) + 1
 1

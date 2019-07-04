@@ -1,10 +1,10 @@
-module UniversalIdentity
+module Initials
 
 # Use README as the docstring of the module:
 @doc let path = joinpath(dirname(@__DIR__), "README.md")
     include_dependency(path)
     replace(read(path, String), "```julia" => "```jldoctest README")
-end UniversalIdentity
+end Initials
 
 export Id
 
@@ -15,9 +15,9 @@ A generic (left) identity for `op`.
 
 # Examples
 ```jldoctest
-julia> using UniversalIdentity
+julia> using Initials
 
-julia> Id(*) isa UniversalIdentity.Identity
+julia> Id(*) isa Initials.Identity
 true
 
 julia> Id(*) * 1
@@ -47,7 +47,7 @@ Id(::OP) where OP = IdentityOf{OP}()
 include("prettyexpr.jl")
 
 """
-    UniversalIdentity.Identity
+    Initials.Identity
 
 An abstract super type of all identity types.
 """
@@ -60,7 +60,7 @@ struct IdentityOf{OP} <: SpecificIdentity{OP} end
 function Base.show(io::IO, ::IdentityOf{OP}) where {OP}
     if !get(io, :limit, false)
         # Don't show full name in REPL etc.:
-        print(io, "UniversalIdentity.")
+        print(io, "Initials.")
     end
     op = string(OP)
     if startswith(op, "typeof(") && endswith(op, ")")
@@ -74,13 +74,13 @@ itypeof_impl(op) = :(SpecificIdentity{typeof($op)})
 @eval itypeof(op) = $(itypeof_impl(:op))
 
 """
-    UniversalIdentity.hasidentity(op) :: Bool
+    Initials.hasidentity(op) :: Bool
 
 # Examples
 ```jldoctest
-julia> using UniversalIdentity
+julia> using Initials
 
-julia> all(UniversalIdentity.hasidentity, [
+julia> all(Initials.hasidentity, [
            *,
            +,
            &,
@@ -92,7 +92,7 @@ julia> all(UniversalIdentity.hasidentity, [
        ])
 true
 
-julia> UniversalIdentity.hasidentity((x, y) -> x + y)
+julia> Initials.hasidentity((x, y) -> x + y)
 false
 ```
 """
@@ -100,16 +100,16 @@ hasidentity(::OP) where OP = hasidentity(OP)
 hasidentity(::Type) = false
 
 """
-    UniversalIdentity.isknown(::Identity) :: Bool
+    Initials.isknown(::Identity) :: Bool
 
 # Examples
 ```jldoctest
-julia> using UniversalIdentity
+julia> using Initials
 
-julia> UniversalIdentity.isknown(Id(+))
+julia> Initials.isknown(Id(+))
 true
 
-julia> UniversalIdentity.isknown(Id((x, y) -> x + y))
+julia> Initials.isknown(Id((x, y) -> x + y))
 false
 ```
 """
@@ -118,15 +118,15 @@ isknown(::SpecificIdentity{OP}) where OP = hasidentity(OP)
 def_impl(op, x, y) =
     quote
         $op(::$(itypeof_impl(op)), $x) = $y
-        UniversalIdentity.hasidentity(::Type{typeof($op)}) = true
+        Initials.hasidentity(::Type{typeof($op)}) = true
     end
 
 """
-    UniversalIdentity.@def op [y = :x]
+    Initials.@def op [y = :x]
 
 Define a generic (left) identity for `op`.
 
-`UniversalIdentity.@def op` is expanded to
+`Initials.@def op` is expanded to
 
 ```julia
 $(prettyexpr(def_impl(:op, :x, :x)))
@@ -134,7 +134,7 @@ $(prettyexpr(def_impl(:op, :x, :x)))
 
 For operations like `push!`, it is useful to define the returned value
 to be different from `x`.  This can be done by using the second
-argument to the maco; i.e., `UniversalIdentity.@def op [x]` is
+argument to the maco; i.e., `Initials.@def op [x]` is
 expanded to
 
 ```julia
@@ -153,7 +153,7 @@ disambiguate_impl(op, right, x, y) =
     end
 
 """
-    UniversalIdentity.@disambiguate op RightType [y = :x]
+    Initials.@disambiguate op RightType [y = :x]
 
 Disambiguate the method introduced by [`@def`](@ref).
 

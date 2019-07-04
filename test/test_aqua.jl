@@ -1,14 +1,14 @@
 module TestAqua
 
 using Aqua
-using UniversalIdentity
+using Initials
 using Setfield
 using BangBang
 
-Aqua.test_all(UniversalIdentity)
+Aqua.test_all(Initials)
 
 Aqua.test_ambiguities(
-    [UniversalIdentity, BangBang, Base];
+    [Initials, BangBang, Base];
     exclude=[Base.get, Setfield.set, Setfield.modify],
 )
 

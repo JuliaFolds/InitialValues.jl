@@ -1,17 +1,17 @@
-using Documenter, UniversalIdentity
+using Documenter, Initials
 
 makedocs(;
-    modules=[UniversalIdentity],
+    modules=[Initials],
     format=Documenter.HTML(),
     pages=[
         "Home" => "index.md",
     ],
-    repo="https://github.com/tkf/UniversalIdentity.jl/blob/{commit}{path}#L{line}",
-    sitename="UniversalIdentity.jl",
+    repo="https://github.com/tkf/Initials.jl/blob/{commit}{path}#L{line}",
+    sitename="Initials.jl",
     authors="Takafumi Arakaki <aka.tkf@gmail.com>",
     strict=VERSION < v"1.2-",
 )
 
 deploydocs(;
-    repo="github.com/tkf/UniversalIdentity.jl",
+    repo="github.com/tkf/Initials.jl",
 )

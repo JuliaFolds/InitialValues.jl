@@ -1,8 +1,8 @@
 module TestBasics
 
 using Test
-using UniversalIdentity
-using UniversalIdentity: isknown, hasidentity
+using Initials
+using Initials: isknown, hasidentity
 
 
 @testset for op in [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
@@ -22,8 +22,8 @@ end
         (max, "Id(max)"),
     ]
         @test repr(Id(op); context=:limit => true) == desired
-        @test repr(Id(op)) == "UniversalIdentity.$desired"
-        @test string(Id(op)) == "UniversalIdentity.$desired"
+        @test repr(Id(op)) == "Initials.$desired"
+        @test string(Id(op)) == "Initials.$desired"
     end
 end
 

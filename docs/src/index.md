@@ -1,14 +1,14 @@
-# UniversalIdentity.jl
+# Initials.jl
 
 ```@index
 ```
 
 ```@docs
-UniversalIdentity
-UniversalIdentity.Id
-UniversalIdentity.@def
-UniversalIdentity.@disambiguate
-UniversalIdentity.hasidentity
-UniversalIdentity.isknown
-UniversalIdentity.Identity
+Initials
+Initials.Id
+Initials.@def
+Initials.@disambiguate
+Initials.hasidentity
+Initials.isknown
+Initials.Identity
 ```

@@ -1,4 +1,4 @@
-module TestUniversalIdentity
+module TestInitials
 using Test
 
 @testset "$file" for file in sort([file for file in readdir(@__DIR__) if
