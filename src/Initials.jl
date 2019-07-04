@@ -74,13 +74,13 @@ itypeof_impl(op) = :(SpecificIdentity{typeof($op)})
 @eval itypeof(op) = $(itypeof_impl(:op))
 
 """
-    Initials.hasidentity(op) :: Bool
+    Initials.hasinitial(op) :: Bool
 
 # Examples
 ```jldoctest
 julia> using Initials
 
-julia> all(Initials.hasidentity, [
+julia> all(Initials.hasinitial, [
            *,
            +,
            &,
@@ -92,12 +92,12 @@ julia> all(Initials.hasidentity, [
        ])
 true
 
-julia> Initials.hasidentity((x, y) -> x + y)
+julia> Initials.hasinitial((x, y) -> x + y)
 false
 ```
 """
-hasidentity(::OP) where OP = hasidentity(OP)
-hasidentity(::Type) = false
+hasinitial(::OP) where OP = hasinitial(OP)
+hasinitial(::Type) = false
 
 """
     Initials.isknown(::Initial) :: Bool
@@ -113,12 +113,12 @@ julia> Initials.isknown(Init((x, y) -> x + y))
 false
 ```
 """
-isknown(::SpecificIdentity{OP}) where OP = hasidentity(OP)
+isknown(::SpecificIdentity{OP}) where OP = hasinitial(OP)
 
 def_impl(op, x, y) =
     quote
         $op(::$(itypeof_impl(op)), $x) = $y
-        Initials.hasidentity(::Type{typeof($op)}) = true
+        Initials.hasinitial(::Type{typeof($op)}) = true
     end
 
 """

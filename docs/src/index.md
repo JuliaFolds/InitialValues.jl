@@ -8,7 +8,7 @@ Initials
 Initials.Init
 Initials.@def
 Initials.@disambiguate
-Initials.hasidentity
+Initials.hasinitial
 Initials.isknown
 Initials.Initial
 ```
