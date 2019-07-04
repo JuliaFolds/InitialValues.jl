@@ -3,7 +3,7 @@ module Initials
 # Use README as the docstring of the module:
 @doc let path = joinpath(dirname(@__DIR__), "README.md")
     include_dependency(path)
-    replace(read(path, String), "```julia" => "```jldoctest README")
+    replace(read(path, String), r"^```julia" => "```jldoctest README")
 end Initials
 
 export Init
@@ -11,7 +11,9 @@ export Init
 """
     Init(op) :: Initial
 
-A generic (left) identity for `op`.
+Create a generic (left) identity for a binary operator `op`.  For
+general binary function, it provides an identity-like generic default
+value (see `BangBang.push!!`).
 
 # Examples
 ```jldoctest
@@ -49,7 +51,7 @@ include("prettyexpr.jl")
 """
     Initials.Initial
 
-An abstract super type of all identity types.
+An abstract super type of all generic initial value types.
 """
 abstract type Initial end
 abstract type SpecificInitial{OP} <: Initial end
@@ -124,7 +126,8 @@ def_impl(op, x, y) =
 """
     Initials.@def op [y = :x]
 
-Define a generic (left) identity for `op`.
+Define a generic (left) identity for a binary operator `op`.  Specify
+the second argument for a binary function in general.
 
 `Initials.@def op` is expanded to
 
@@ -134,8 +137,7 @@ $(prettyexpr(def_impl(:op, :x, :x)))
 
 For operations like `push!`, it is useful to define the returned value
 to be different from `x`.  This can be done by using the second
-argument to the maco; i.e., `Initials.@def op [x]` is
-expanded to
+argument to the maco; i.e., `Initials.@def push! [x]` is expanded to
 
 ```julia
 $(prettyexpr(def_impl(:push!, :x, "[x]")))
