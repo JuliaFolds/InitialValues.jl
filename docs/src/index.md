@@ -5,7 +5,7 @@
 
 ```@docs
 Initials
-Initials.Id
+Initials.Init
 Initials.@def
 Initials.@disambiguate
 Initials.hasidentity

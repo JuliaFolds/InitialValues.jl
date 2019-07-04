@@ -10,35 +10,35 @@
 ```julia
 julia> using Initials
 
-julia> Id(+) + 1
+julia> Init(+) + 1
 1
 
-julia> foldl(+, 1:3, init=Id(+))
+julia> foldl(+, 1:3, init=Init(+))
 6
 ```
 
 Following methods are defined:
 
 ```julia
-julia> Id(*) * 1
+julia> Init(*) * 1
 1
 
-julia> Id(&) & 1
+julia> Init(&) & 1
 1
 
-julia> Id(|) | 1
+julia> Init(|) | 1
 1
 
-julia> min(Id(min), 1)
+julia> min(Init(min), 1)
 1
 
-julia> max(Id(max), 1)
+julia> max(Init(max), 1)
 1
 
-julia> Base.add_sum(Id(Base.add_sum), 1)
+julia> Base.add_sum(Init(Base.add_sum), 1)
 1
 
-julia> Base.mul_prod(Id(Base.mul_prod), 1)
+julia> Base.mul_prod(Init(Base.mul_prod), 1)
 1
 ```
 

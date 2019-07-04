@@ -6,10 +6,10 @@ module Initials
     replace(read(path, String), "```julia" => "```jldoctest README")
 end Initials
 
-export Id
+export Init
 
 """
-    Id(op) :: Initial
+    Init(op) :: Initial
 
 A generic (left) identity for `op`.
 
@@ -17,32 +17,32 @@ A generic (left) identity for `op`.
 ```jldoctest
 julia> using Initials
 
-julia> Id(*) isa Initials.Initial
+julia> Init(*) isa Initials.Initial
 true
 
-julia> Id(*) * 1
+julia> Init(*) * 1
 1
 
-julia> Id(*) * missing
+julia> Init(*) * missing
 missing
 
-julia> Id(*) * "right"
+julia> Init(*) * "right"
 "right"
 
-julia> Id(*) * :actual_anything_works
+julia> Init(*) * :actual_anything_works
 :actual_anything_works
 
-julia> foldl(+, 1:3, init=Id(+))
+julia> foldl(+, 1:3, init=Init(+))
 6
 
-julia> float(Id(*))
+julia> float(Init(*))
 1.0
 
-julia> Integer(Id(+))
+julia> Integer(Init(+))
 0
 ```
 """
-Id(::OP) where OP = IdentityOf{OP}()
+Init(::OP) where OP = IdentityOf{OP}()
 
 include("prettyexpr.jl")
 
@@ -64,9 +64,9 @@ function Base.show(io::IO, ::IdentityOf{OP}) where {OP}
     end
     op = string(OP)
     if startswith(op, "typeof(") && endswith(op, ")")
-        print(io, "Id(", op[length("typeof(") + 1 : end - length(")")], ")")
+        print(io, "Init(", op[length("typeof(") + 1 : end - length(")")], ")")
     else
-        print(io, "Id(::", op, ")")
+        print(io, "Init(::", op, ")")
     end
 end
 
@@ -106,10 +106,10 @@ hasidentity(::Type) = false
 ```jldoctest
 julia> using Initials
 
-julia> Initials.isknown(Id(+))
+julia> Initials.isknown(Init(+))
 true
 
-julia> Initials.isknown(Id((x, y) -> x + y))
+julia> Initials.isknown(Init((x, y) -> x + y))
 false
 ```
 """

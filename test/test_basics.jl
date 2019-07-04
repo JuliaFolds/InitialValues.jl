@@ -6,24 +6,24 @@ using Initials: isknown, hasidentity
 
 
 @testset for op in [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
-    @test op(Id(op), :anything) === :anything
+    @test op(Init(op), :anything) === :anything
     @test hasidentity(op)
     @test hasidentity(typeof(op))
-    @test isknown(Id(op))
+    @test isknown(Init(op))
 end
 
 @testset "show" begin
     @testset "$desired" for (op, desired) in [
-        (+, "Id(+)"),
-        (*, "Id(*)"),
-        (|, "Id(|)"),
-        (&, "Id(&)"),
-        (min, "Id(min)"),
-        (max, "Id(max)"),
+        (+, "Init(+)"),
+        (*, "Init(*)"),
+        (|, "Init(|)"),
+        (&, "Init(&)"),
+        (min, "Init(min)"),
+        (max, "Init(max)"),
     ]
-        @test repr(Id(op); context=:limit => true) == desired
-        @test repr(Id(op)) == "Initials.$desired"
-        @test string(Id(op)) == "Initials.$desired"
+        @test repr(Init(op); context=:limit => true) == desired
+        @test repr(Init(op)) == "Initials.$desired"
+        @test string(Init(op)) == "Initials.$desired"
     end
 end
 
@@ -35,22 +35,22 @@ end
 end
 
 @testset "missing" begin
-    @test min(Id(min), missing) === missing
-    @test max(Id(max), missing) === missing
+    @test min(Init(min), missing) === missing
+    @test max(Init(max), missing) === missing
 end
 
 @testset "convert" begin
     @testset "float" begin
-        @test float(Id(+)) === 0.0
-        @test float(Id(*)) === 1.0
-        @test float(Id(Base.add_sum)) === 0.0
-        @test float(Id(Base.mul_prod)) === 1.0
+        @test float(Init(+)) === 0.0
+        @test float(Init(*)) === 1.0
+        @test float(Init(Base.add_sum)) === 0.0
+        @test float(Init(Base.mul_prod)) === 1.0
     end
     @testset "Integer" begin
-        @test Integer(Id(+)) === 0
-        @test Integer(Id(*)) === 1
-        @test Integer(Id(Base.add_sum)) === 0
-        @test Integer(Id(Base.mul_prod)) === 1
+        @test Integer(Init(+)) === 0
+        @test Integer(Init(*)) === 1
+        @test Integer(Init(Base.add_sum)) === 0
+        @test Integer(Init(Base.mul_prod)) === 1
     end
     @testset for T in [
         Int,
@@ -58,13 +58,13 @@ end
         Float64,
         Float32,
     ]
-        @test convert(T, Id(+))::T == 0
-        @test convert(T, Id(*))::T == 1
-        @test convert(T, Id(Base.add_sum))::T == 0
-        @test convert(T, Id(Base.mul_prod))::T == 1
+        @test convert(T, Init(+))::T == 0
+        @test convert(T, Init(*))::T == 1
+        @test convert(T, Init(Base.add_sum))::T == 0
+        @test convert(T, Init(Base.mul_prod))::T == 1
     end
 
-    @test convert(String, Id(*)) === ""
+    @test convert(String, Init(*)) === ""
 end
 
 end  # module
