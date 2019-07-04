@@ -42,7 +42,7 @@ julia> Integer(Init(+))
 0
 ```
 """
-Init(::OP) where OP = IdentityOf{OP}()
+Init(::OP) where OP = InitialOf{OP}()
 
 include("prettyexpr.jl")
 
@@ -55,9 +55,9 @@ abstract type Initial end
 abstract type SpecificInitial{OP} <: Initial end
 # abstract type GenericIdentity <: AbstractIdentity end
 
-struct IdentityOf{OP} <: SpecificInitial{OP} end
+struct InitialOf{OP} <: SpecificInitial{OP} end
 
-function Base.show(io::IO, ::IdentityOf{OP}) where {OP}
+function Base.show(io::IO, ::InitialOf{OP}) where {OP}
     if !get(io, :limit, false)
         # Don't show full name in REPL etc.:
         print(io, "Initials.")
