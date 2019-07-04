@@ -10,5 +10,5 @@ Initials.@def
 Initials.@disambiguate
 Initials.hasidentity
 Initials.isknown
-Initials.Identity
+Initials.Initial
 ```

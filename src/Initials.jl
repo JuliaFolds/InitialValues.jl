@@ -9,7 +9,7 @@ end Initials
 export Id
 
 """
-    Id(op) :: Identity
+    Id(op) :: Initial
 
 A generic (left) identity for `op`.
 
@@ -17,7 +17,7 @@ A generic (left) identity for `op`.
 ```jldoctest
 julia> using Initials
 
-julia> Id(*) isa Initials.Identity
+julia> Id(*) isa Initials.Initial
 true
 
 julia> Id(*) * 1
@@ -47,12 +47,12 @@ Id(::OP) where OP = IdentityOf{OP}()
 include("prettyexpr.jl")
 
 """
-    Initials.Identity
+    Initials.Initial
 
 An abstract super type of all identity types.
 """
-abstract type Identity end
-abstract type SpecificIdentity{OP} <: Identity end
+abstract type Initial end
+abstract type SpecificIdentity{OP} <: Initial end
 # abstract type GenericIdentity <: AbstractIdentity end
 
 struct IdentityOf{OP} <: SpecificIdentity{OP} end
@@ -100,7 +100,7 @@ hasidentity(::OP) where OP = hasidentity(OP)
 hasidentity(::Type) = false
 
 """
-    Initials.isknown(::Identity) :: Bool
+    Initials.isknown(::Initial) :: Bool
 
 # Examples
 ```jldoctest
