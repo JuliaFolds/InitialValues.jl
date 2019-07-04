@@ -52,10 +52,10 @@ include("prettyexpr.jl")
 An abstract super type of all identity types.
 """
 abstract type Initial end
-abstract type SpecificIdentity{OP} <: Initial end
+abstract type SpecificInitial{OP} <: Initial end
 # abstract type GenericIdentity <: AbstractIdentity end
 
-struct IdentityOf{OP} <: SpecificIdentity{OP} end
+struct IdentityOf{OP} <: SpecificInitial{OP} end
 
 function Base.show(io::IO, ::IdentityOf{OP}) where {OP}
     if !get(io, :limit, false)
@@ -70,7 +70,7 @@ function Base.show(io::IO, ::IdentityOf{OP}) where {OP}
     end
 end
 
-itypeof_impl(op) = :(SpecificIdentity{typeof($op)})
+itypeof_impl(op) = :(SpecificInitial{typeof($op)})
 @eval itypeof(op) = $(itypeof_impl(:op))
 
 """
@@ -113,7 +113,7 @@ julia> Initials.isknown(Init((x, y) -> x + y))
 false
 ```
 """
-isknown(::SpecificIdentity{OP}) where OP = hasinitial(OP)
+isknown(::SpecificInitial{OP}) where OP = hasinitial(OP)
 
 def_impl(op, x, y) =
     quote
@@ -180,12 +180,12 @@ end
 @disambiguate Base.max Missing
 
 const ZeroType = Union{
-    SpecificIdentity{typeof(+)},
-    SpecificIdentity{typeof(Base.add_sum)},
+    SpecificInitial{typeof(+)},
+    SpecificInitial{typeof(Base.add_sum)},
 }
 const OneType = Union{
-    SpecificIdentity{typeof(*)},
-    SpecificIdentity{typeof(Base.mul_prod)},
+    SpecificInitial{typeof(*)},
+    SpecificInitial{typeof(Base.mul_prod)},
 }
 
 Base.float(::ZeroType) = 0.0
@@ -199,10 +199,10 @@ Base.convert(::Type{T}, ::OneType) where {T <: Union{Number, AbstractString}} =
 
 # Technically true, but could be a disaster in practice?:
 #=
-Base.convert(::Type{T}, ::Union{SpecificIdentity{typeof(min)}}) where {T <: Number} =
+Base.convert(::Type{T}, ::Union{SpecificInitial{typeof(min)}}) where {T <: Number} =
     typemax(T)
 
-Base.convert(::Type{T}, ::Union{SpecificIdentity{typeof(max)}}) where {T <: Number} =
+Base.convert(::Type{T}, ::Union{SpecificInitial{typeof(max)}}) where {T <: Number} =
     typemin(T)
 =#
 
