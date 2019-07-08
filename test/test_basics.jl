@@ -2,13 +2,13 @@ module TestBasics
 
 using Test
 using InitialValues
-using InitialValues: isknown, hasinitial
+using InitialValues: isknown, hasinitialvalue
 
 
 @testset for op in [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
     @test op(Init(op), :anything) === :anything
-    @test hasinitial(op)
-    @test hasinitial(typeof(op))
+    @test hasinitialvalue(op)
+    @test hasinitialvalue(typeof(op))
     @test isknown(Init(op))
 end
 
@@ -27,11 +27,11 @@ end
     end
 end
 
-@testset "hasinitial" begin
-    @test !hasinitial(-)
-    @test !hasinitial(typeof(-))
-    @test !hasinitial(Int)
-    @test !hasinitial(Type{Int})
+@testset "hasinitialvalue" begin
+    @test !hasinitialvalue(-)
+    @test !hasinitialvalue(typeof(-))
+    @test !hasinitialvalue(Int)
+    @test !hasinitialvalue(Type{Int})
 end
 
 @testset "missing" begin

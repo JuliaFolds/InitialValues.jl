@@ -8,7 +8,7 @@ InitialValues
 InitialValues.Init
 InitialValues.@def
 InitialValues.@disambiguate
-InitialValues.hasinitial
+InitialValues.hasinitialvalue
 InitialValues.isknown
-InitialValues.Initial
+InitialValues.InitialValue
 ```

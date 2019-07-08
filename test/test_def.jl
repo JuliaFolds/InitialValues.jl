@@ -1,7 +1,7 @@
 module TestDef
 
 using Test
-using InitialValues: Init, hasinitial, isknown
+using InitialValues: Init, hasinitialvalue, isknown
 
 module CleanNameSpace
     using InitialValues: @def, @disambiguate
@@ -14,7 +14,7 @@ end
 @testset "CleanNameSpace" begin
     add = CleanNameSpace.add
     @test !isdefined(CleanNameSpace, :InitialValues)
-    @test hasinitial(add)
+    @test hasinitialvalue(add)
     @test isknown(Init(add))
     @test add(Init(add), :x) == "Got: :x"
     @test add(Init(add), missing) == "Got: missing"
@@ -32,7 +32,7 @@ end
 @testset "NonFunction" begin
     add = NonFunction.add
     @test !(add isa Function)
-    @test hasinitial(add)
+    @test hasinitialvalue(add)
     @test isknown(Init(add))
     @test add(Init(add), :x) == :x
     @test add(Init(add), missing) == "Got: missing"

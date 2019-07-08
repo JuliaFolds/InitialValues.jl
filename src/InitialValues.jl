@@ -9,7 +9,7 @@ end InitialValues
 export Init
 
 """
-    Init(op) :: Initial
+    Init(op) :: InitialValue
 
 Create a generic (left) identity for a binary operator `op`.  For
 general binary function, it provides an identity-like generic default
@@ -19,7 +19,7 @@ value (see `BangBang.push!!`).
 ```jldoctest
 julia> using InitialValues
 
-julia> Init(*) isa InitialValues.Initial
+julia> Init(*) isa InitialValues.InitialValue
 true
 
 julia> Init(*) * 1
@@ -44,22 +44,22 @@ julia> Integer(Init(+))
 0
 ```
 """
-Init(::OP) where OP = InitialOf{OP}()
+Init(::OP) where OP = InitialValueOf{OP}()
 
 include("prettyexpr.jl")
 
 """
-    InitialValues.Initial
+    InitialValues.InitialValue
 
 An abstract super type of all generic initial value types.
 """
-abstract type Initial end
-abstract type SpecificInitial{OP} <: Initial end
+abstract type InitialValue end
+abstract type SpecificInitialValue{OP} <: InitialValue end
 # abstract type GenericIdentity <: AbstractIdentity end
 
-struct InitialOf{OP} <: SpecificInitial{OP} end
+struct InitialValueOf{OP} <: SpecificInitialValue{OP} end
 
-function Base.show(io::IO, ::InitialOf{OP}) where {OP}
+function Base.show(io::IO, ::InitialValueOf{OP}) where {OP}
     if !get(io, :limit, false)
         # Don't show full name in REPL etc.:
         print(io, "InitialValues.")
@@ -72,17 +72,17 @@ function Base.show(io::IO, ::InitialOf{OP}) where {OP}
     end
 end
 
-itypeof_impl(op) = :(SpecificInitial{typeof($op)})
+itypeof_impl(op) = :(SpecificInitialValue{typeof($op)})
 @eval itypeof(op) = $(itypeof_impl(:op))
 
 """
-    InitialValues.hasinitial(op) :: Bool
+    InitialValues.hasinitialvalue(op) :: Bool
 
 # Examples
 ```jldoctest
 julia> using InitialValues
 
-julia> all(InitialValues.hasinitial, [
+julia> all(InitialValues.hasinitialvalue, [
            *,
            +,
            &,
@@ -94,15 +94,15 @@ julia> all(InitialValues.hasinitial, [
        ])
 true
 
-julia> InitialValues.hasinitial((x, y) -> x + y)
+julia> InitialValues.hasinitialvalue((x, y) -> x + y)
 false
 ```
 """
-hasinitial(::OP) where OP = hasinitial(OP)
-hasinitial(::Type) = false
+hasinitialvalue(::OP) where OP = hasinitialvalue(OP)
+hasinitialvalue(::Type) = false
 
 """
-    InitialValues.isknown(::Initial) :: Bool
+    InitialValues.isknown(::InitialValue) :: Bool
 
 # Examples
 ```jldoctest
@@ -115,12 +115,12 @@ julia> InitialValues.isknown(Init((x, y) -> x + y))
 false
 ```
 """
-isknown(::SpecificInitial{OP}) where OP = hasinitial(OP)
+isknown(::SpecificInitialValue{OP}) where OP = hasinitialvalue(OP)
 
 def_impl(op, x, y) =
     quote
         $op(::$(itypeof_impl(op)), $x) = $y
-        InitialValues.hasinitial(::Type{typeof($op)}) = true
+        InitialValues.hasinitialvalue(::Type{typeof($op)}) = true
     end
 
 """
@@ -182,12 +182,12 @@ end
 @disambiguate Base.max Missing
 
 const ZeroType = Union{
-    SpecificInitial{typeof(+)},
-    SpecificInitial{typeof(Base.add_sum)},
+    SpecificInitialValue{typeof(+)},
+    SpecificInitialValue{typeof(Base.add_sum)},
 }
 const OneType = Union{
-    SpecificInitial{typeof(*)},
-    SpecificInitial{typeof(Base.mul_prod)},
+    SpecificInitialValue{typeof(*)},
+    SpecificInitialValue{typeof(Base.mul_prod)},
 }
 
 Base.float(::ZeroType) = 0.0
@@ -201,10 +201,10 @@ Base.convert(::Type{T}, ::OneType) where {T <: Union{Number, AbstractString}} =
 
 # Technically true, but could be a disaster in practice?:
 #=
-Base.convert(::Type{T}, ::Union{SpecificInitial{typeof(min)}}) where {T <: Number} =
+Base.convert(::Type{T}, ::Union{SpecificInitialValue{typeof(min)}}) where {T <: Number} =
     typemax(T)
 
-Base.convert(::Type{T}, ::Union{SpecificInitial{typeof(max)}}) where {T <: Number} =
+Base.convert(::Type{T}, ::Union{SpecificInitialValue{typeof(max)}}) where {T <: Number} =
     typemin(T)
 =#
 
