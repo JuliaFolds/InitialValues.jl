@@ -1,7 +1,7 @@
 module TestPrettyExpr
 
 using Test
-using Initials: prettyexpr, def_impl, disambiguate_impl
+using InitialValues: prettyexpr, def_impl, disambiguate_impl
 
 parseall(code) = Meta.parse("begin $code end")
 

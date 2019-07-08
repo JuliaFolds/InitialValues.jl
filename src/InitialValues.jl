@@ -1,10 +1,10 @@
-module Initials
+module InitialValues
 
 # Use README as the docstring of the module:
 @doc let path = joinpath(dirname(@__DIR__), "README.md")
     include_dependency(path)
     replace(read(path, String), r"^```julia" => "```jldoctest README")
-end Initials
+end InitialValues
 
 export Init
 
@@ -17,9 +17,9 @@ value (see `BangBang.push!!`).
 
 # Examples
 ```jldoctest
-julia> using Initials
+julia> using InitialValues
 
-julia> Init(*) isa Initials.Initial
+julia> Init(*) isa InitialValues.Initial
 true
 
 julia> Init(*) * 1
@@ -49,7 +49,7 @@ Init(::OP) where OP = InitialOf{OP}()
 include("prettyexpr.jl")
 
 """
-    Initials.Initial
+    InitialValues.Initial
 
 An abstract super type of all generic initial value types.
 """
@@ -62,7 +62,7 @@ struct InitialOf{OP} <: SpecificInitial{OP} end
 function Base.show(io::IO, ::InitialOf{OP}) where {OP}
     if !get(io, :limit, false)
         # Don't show full name in REPL etc.:
-        print(io, "Initials.")
+        print(io, "InitialValues.")
     end
     op = string(OP)
     if startswith(op, "typeof(") && endswith(op, ")")
@@ -76,13 +76,13 @@ itypeof_impl(op) = :(SpecificInitial{typeof($op)})
 @eval itypeof(op) = $(itypeof_impl(:op))
 
 """
-    Initials.hasinitial(op) :: Bool
+    InitialValues.hasinitial(op) :: Bool
 
 # Examples
 ```jldoctest
-julia> using Initials
+julia> using InitialValues
 
-julia> all(Initials.hasinitial, [
+julia> all(InitialValues.hasinitial, [
            *,
            +,
            &,
@@ -94,7 +94,7 @@ julia> all(Initials.hasinitial, [
        ])
 true
 
-julia> Initials.hasinitial((x, y) -> x + y)
+julia> InitialValues.hasinitial((x, y) -> x + y)
 false
 ```
 """
@@ -102,16 +102,16 @@ hasinitial(::OP) where OP = hasinitial(OP)
 hasinitial(::Type) = false
 
 """
-    Initials.isknown(::Initial) :: Bool
+    InitialValues.isknown(::Initial) :: Bool
 
 # Examples
 ```jldoctest
-julia> using Initials
+julia> using InitialValues
 
-julia> Initials.isknown(Init(+))
+julia> InitialValues.isknown(Init(+))
 true
 
-julia> Initials.isknown(Init((x, y) -> x + y))
+julia> InitialValues.isknown(Init((x, y) -> x + y))
 false
 ```
 """
@@ -120,16 +120,16 @@ isknown(::SpecificInitial{OP}) where OP = hasinitial(OP)
 def_impl(op, x, y) =
     quote
         $op(::$(itypeof_impl(op)), $x) = $y
-        Initials.hasinitial(::Type{typeof($op)}) = true
+        InitialValues.hasinitial(::Type{typeof($op)}) = true
     end
 
 """
-    Initials.@def op [y = :x]
+    InitialValues.@def op [y = :x]
 
 Define a generic (left) identity for a binary operator `op`.  Specify
 the second argument for a binary function in general.
 
-`Initials.@def op` is expanded to
+`InitialValues.@def op` is expanded to
 
 ```julia
 $(prettyexpr(def_impl(:op, :x, :x)))
@@ -137,7 +137,7 @@ $(prettyexpr(def_impl(:op, :x, :x)))
 
 For operations like `push!`, it is useful to define the returned value
 to be different from `x`.  This can be done by using the second
-argument to the maco; i.e., `Initials.@def push! [x]` is expanded to
+argument to the maco; i.e., `InitialValues.@def push! [x]` is expanded to
 
 ```julia
 $(prettyexpr(def_impl(:push!, :x, "[x]")))
@@ -155,7 +155,7 @@ disambiguate_impl(op, right, x, y) =
     end
 
 """
-    Initials.@disambiguate op RightType [y = :x]
+    InitialValues.@disambiguate op RightType [y = :x]
 
 Disambiguate the method introduced by [`@def`](@ref).
 

@@ -1,10 +1,10 @@
 module TestDef
 
 using Test
-using Initials: Init, hasinitial, isknown
+using InitialValues: Init, hasinitial, isknown
 
 module CleanNameSpace
-    using Initials: @def, @disambiguate
+    using InitialValues: @def, @disambiguate
     add(x, y) = x + y
     got(x) = string("Got: ", repr(x))
     @def add got(x)
@@ -13,7 +13,7 @@ end
 
 @testset "CleanNameSpace" begin
     add = CleanNameSpace.add
-    @test !isdefined(CleanNameSpace, :Initials)
+    @test !isdefined(CleanNameSpace, :InitialValues)
     @test hasinitial(add)
     @test isknown(Init(add))
     @test add(Init(add), :x) == "Got: :x"
@@ -21,7 +21,7 @@ end
 end
 
 module NonFunction
-    using Initials: @def, @disambiguate
+    using InitialValues: @def, @disambiguate
     struct Add end
     const add = Add()
     add(x, y) = x + y

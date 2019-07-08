@@ -1,14 +1,14 @@
 module TestAqua
 
 using Aqua
-using Initials
+using InitialValues
 using Setfield
 using BangBang
 
-Aqua.test_all(Initials)
+Aqua.test_all(InitialValues)
 
 Aqua.test_ambiguities(
-    [Initials, BangBang, Base];
+    [InitialValues, BangBang, Base];
     exclude=[Base.get, Setfield.set, Setfield.modify],
 )
 

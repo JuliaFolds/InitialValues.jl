@@ -1,8 +1,8 @@
 module TestBasics
 
 using Test
-using Initials
-using Initials: isknown, hasinitial
+using InitialValues
+using InitialValues: isknown, hasinitial
 
 
 @testset for op in [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
@@ -22,8 +22,8 @@ end
         (max, "Init(max)"),
     ]
         @test repr(Init(op); context=:limit => true) == desired
-        @test repr(Init(op)) == "Initials.$desired"
-        @test string(Init(op)) == "Initials.$desired"
+        @test repr(Init(op)) == "InitialValues.$desired"
+        @test string(Init(op)) == "InitialValues.$desired"
     end
 end
 

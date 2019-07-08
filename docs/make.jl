@@ -1,17 +1,17 @@
-using Documenter, Initials
+using Documenter, InitialValues
 
 makedocs(;
-    modules=[Initials],
+    modules=[InitialValues],
     format=Documenter.HTML(),
     pages=[
         "Home" => "index.md",
     ],
-    repo="https://github.com/tkf/Initials.jl/blob/{commit}{path}#L{line}",
-    sitename="Initials.jl",
+    repo="https://github.com/tkf/InitialValues.jl/blob/{commit}{path}#L{line}",
+    sitename="InitialValues.jl",
     authors="Takafumi Arakaki <aka.tkf@gmail.com>",
     strict=VERSION < v"1.2-",
 )
 
 deploydocs(;
-    repo="github.com/tkf/Initials.jl",
+    repo="github.com/tkf/InitialValues.jl",
 )

@@ -1,19 +1,19 @@
-# Initials.jl: Canonical default initial values ("left identity") for Julia
+# InitialValues.jl: Canonical default initial values ("left identity") for Julia
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://tkf.github.io/Initials.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://tkf.github.io/Initials.jl/dev)
-[![Build Status](https://travis-ci.com/tkf/Initials.jl.svg?branch=master)](https://travis-ci.com/tkf/Initials.jl)
-[![Codecov](https://codecov.io/gh/tkf/Initials.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/tkf/Initials.jl)
-[![Coveralls](https://coveralls.io/repos/github/tkf/Initials.jl/badge.svg?branch=master)](https://coveralls.io/github/tkf/Initials.jl?branch=master)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://tkf.github.io/InitialValues.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://tkf.github.io/InitialValues.jl/dev)
+[![Build Status](https://travis-ci.com/tkf/InitialValues.jl.svg?branch=master)](https://travis-ci.com/tkf/InitialValues.jl)
+[![Codecov](https://codecov.io/gh/tkf/InitialValues.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/tkf/InitialValues.jl)
+[![Coveralls](https://coveralls.io/repos/github/tkf/InitialValues.jl/badge.svg?branch=master)](https://coveralls.io/github/tkf/InitialValues.jl?branch=master)
 [![Aqua QA](https://img.shields.io/badge/Aqua.jl-%F0%9F%8C%A2-aqua.svg)](https://github.com/tkf/Aqua.jl)
 
-Initials.jl provides a generic singleton initial value `Init(f)` that
+InitialValues.jl provides a generic singleton initial value `Init(f)` that
 can be used as `a₀` in `f(a₀, x)`.  For a binary operator `op`, it
 means that `Init(op)` acts like the left identity for _any_ type of
 `x`:
 
 ```julia
-julia> using Initials
+julia> using InitialValues
 
 julia> Init(+) + 1
 1
@@ -78,5 +78,5 @@ uses `Init`.
 
 As binary operators like `*` in `Base` are heavily overloaded,
 creating generic definitions such as above could have introduced
-method ambiguities.  To protect against such situation, Initials.jl is
+method ambiguities.  To protect against such situation, InitialValues.jl is
 tested using [Aqua.jl](https://github.com/tkf/Aqua.jl).

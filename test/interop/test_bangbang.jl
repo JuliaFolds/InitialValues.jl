@@ -2,7 +2,7 @@ module TestBangBang
 
 using Test
 using BangBang
-using Initials: Init, hasinitial
+using InitialValues: Init, hasinitial
 
 @testset begin
     @test hasinitial(push!!)
