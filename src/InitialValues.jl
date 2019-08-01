@@ -123,6 +123,13 @@ def_impl(op, x, y) =
         InitialValues.hasinitialvalue(::Type{typeof($op)}) = true
     end
 
+def_monoid_impl(op, x) =
+    quote
+        $op(::$(itypeof_impl(op)), $x::$(itypeof_impl(op))) = $x
+        $op($x, ::$(itypeof_impl(op))) = $x
+        $(def_impl(op, x, x))
+    end
+
 """
     InitialValues.@def op [y = :x]
 
@@ -149,34 +156,49 @@ macro def(op, y = :x)
     def_impl(esc(op), esc(:x), esc(y))
 end
 
-disambiguate_impl(op, right, x, y) =
+"""
+    InitialValues.@def_monoid op
+
+Define a generic identity for a binary operator `op`.
+`InitialValues.@def_monoid op` is expanded to
+
+```julia
+$(prettyexpr(def_monoid_impl(:op, :x)))
+```
+"""
+macro def_monoid(op)
+    def_monoid_impl(esc(op), esc(:x))
+end
+
+disambiguate_impl(op, other, x) =
     quote
-        $op(::$(itypeof_impl(op)), $x::$right) = $y
+        $op(::$(itypeof_impl(op)), $x::$other) = $x
+        $op($x::$other, ::$(itypeof_impl(op))) = $x
     end
 
 """
-    InitialValues.@disambiguate op RightType [y = :x]
+    InitialValues.@disambiguate op OtherType
 
-Disambiguate the method introduced by [`@def`](@ref).
+Disambiguate the method introduced by [`@def_monoid`](@ref).
 
 It is expanded to
 
 ```julia
-$(prettyexpr(disambiguate_impl(:op, :RightType, :x, :x)))
+$(prettyexpr(disambiguate_impl(:op, :OtherType, :x)))
 ```
 """
-macro disambiguate(op, right, y = :x)
-    disambiguate_impl(esc(op), esc(right), esc(:x), esc(y))
+macro disambiguate(op, other)
+    disambiguate_impl(esc(op), esc(other), esc(:x))
 end
 
-@def Base.:*
-@def Base.:+
-@def Base.:&
-@def Base.:|
-@def Base.min
-@def Base.max
-@def Base.add_sum
-@def Base.mul_prod
+@def_monoid Base.:*
+@def_monoid Base.:+
+@def_monoid Base.:&
+@def_monoid Base.:|
+@def_monoid Base.min
+@def_monoid Base.max
+@def_monoid Base.add_sum
+@def_monoid Base.mul_prod
 
 @disambiguate Base.min Missing
 @disambiguate Base.max Missing

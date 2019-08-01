@@ -8,7 +8,7 @@ module CleanNameSpace
     add(x, y) = x + y
     got(x) = string("Got: ", repr(x))
     @def add got(x)
-    @disambiguate add Missing got(x)
+    @disambiguate add Missing
 end
 
 @testset "CleanNameSpace" begin
@@ -17,7 +17,7 @@ end
     @test hasinitialvalue(add)
     @test isknown(Init(add))
     @test add(Init(add), :x) == "Got: :x"
-    @test add(Init(add), missing) == "Got: missing"
+    @test add(Init(add), missing) === missing
 end
 
 module NonFunction
@@ -26,7 +26,7 @@ module NonFunction
     const add = Add()
     add(x, y) = x + y
     @def add
-    @disambiguate add Missing "Got: $x"
+    @disambiguate add Missing
 end
 
 @testset "NonFunction" begin
@@ -35,7 +35,7 @@ end
     @test hasinitialvalue(add)
     @test isknown(Init(add))
     @test add(Init(add), :x) == :x
-    @test add(Init(add), missing) == "Got: missing"
+    @test add(Init(add), missing) === missing
 end
 
 end  # module
