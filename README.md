@@ -1,4 +1,4 @@
-# InitialValues.jl: Canonical default initial values ("left identity") for Julia
+# InitialValues.jl: Canonical default initial values and identity elements for Julia
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://tkf.github.io/InitialValues.jl/stable)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://tkf.github.io/InitialValues.jl/dev)
@@ -7,10 +7,9 @@
 [![Coveralls](https://coveralls.io/repos/github/tkf/InitialValues.jl/badge.svg?branch=master)](https://coveralls.io/github/tkf/InitialValues.jl?branch=master)
 [![Aqua QA](https://img.shields.io/badge/Aqua.jl-%F0%9F%8C%A2-aqua.svg)](https://github.com/tkf/Aqua.jl)
 
-InitialValues.jl provides a generic singleton initial value `Init(f)` that
-can be used as `a₀` in `f(a₀, x)`.  For a binary operator `op`, it
-means that `Init(op)` acts like the left identity for _any_ type of
-`x`:
+InitialValues.jl provides a generic singleton initial value `Init(f)`
+that can be used as `a₀` in `f(a₀, x)`.  For a binary operator `op`,
+it means that `Init(op)` acts like the identity for _any_ type of `x`:
 
 ```julia
 julia> using InitialValues
@@ -18,7 +17,7 @@ julia> using InitialValues
 julia> Init(+) + 1
 1
 
-julia> Init(+) + 1.0
+julia> 1.0 + Init(+)
 1.0
 
 julia> foldl(+, 1:3, init=Init(+))
