@@ -10,11 +10,11 @@ version = "0.3.0"
 
 [[BangBang]]
 deps = ["Future", "LinearAlgebra", "Requires", "Setfield"]
-git-tree-sha1 = "4b46d6143c1ec6c92b05ab9f6226a4c9304a6b33"
+git-tree-sha1 = "e097236277ddc79a412679a415e46a90ed33c39b"
 repo-rev = "master"
 repo-url = "https://github.com/tkf/BangBang.jl"
 uuid = "198e06fe-97b7-11e9-32a5-e1d131e6ad66"
-version = "0.1.0"
+version = "0.2.0-DEV"
 
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -56,7 +56,7 @@ uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 [[InitialValues]]
 path = ".."
 uuid = "22cec73e-a1b8-11e9-2c92-598750a2cf9c"
-version = "0.1.0"
+version = "0.2.0-DEV"
 
 [[InteractiveUtils]]
 deps = ["Markdown"]
