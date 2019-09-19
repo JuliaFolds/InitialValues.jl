@@ -3,7 +3,7 @@ module InitialValues
 # Use README as the docstring of the module:
 @doc let path = joinpath(dirname(@__DIR__), "README.md")
     include_dependency(path)
-    replace(read(path, String), r"^```julia" => "```jldoctest README")
+    replace(read(path, String), r"^```julia"m => "```jldoctest README")
 end InitialValues
 
 export Init
