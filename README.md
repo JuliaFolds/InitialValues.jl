@@ -21,7 +21,7 @@ julia> 1.0 + Init(+)
 1.0
 
 julia> foldl(+, 1:3, init=Init(+))
-6
+7
 ```
 
 Following methods are defined for the binary operators in `Base`:
