@@ -6,7 +6,7 @@ module InitialValues
     replace(read(path, String), r"^```julia"m => "```jldoctest README")
 end InitialValues
 
-export Init
+export Init, asmonoid
 
 """
     Init(op) :: InitialValue
@@ -229,5 +229,47 @@ Base.convert(::Type{T}, ::Union{SpecificInitialValue{typeof(min)}}) where {T <: 
 Base.convert(::Type{T}, ::Union{SpecificInitialValue{typeof(max)}}) where {T <: Number} =
     typemin(T)
 =#
+
+struct AdjoinIdentity{T} <: Function
+    op::T
+end
+
+"""
+    asmonoid(op) -> op′
+
+"Add" (adjoin) an identity element to the semigroup `op` if necessary
+and return the monoid `op′`.
+
+# Examples
+```jldoctest
+julia> using InitialValues
+
+julia> append!′ = asmonoid(append!);
+
+julia> xs = [];
+
+julia> append!′(Init(append!′), xs) === xs
+true
+
+julia> foldl(append!′, [xs, [1], [2, 3]], init=Init(append!′))
+3-element Array{Any,1}:
+ 1
+ 2
+ 3
+
+julia> ans === xs  # `xs` is modified
+true
+```
+"""
+asmonoid(op) = hasinitialvalue(op) ? op : AdjoinIdentity(op)
+
+(sg::AdjoinIdentity)(x, y) = sg.op(x, y)
+(::AdjoinIdentity{OP})(::SpecificInitialValue{AdjoinIdentity{OP}}, x) where OP =
+    x
+(::AdjoinIdentity{OP})(x, ::SpecificInitialValue{AdjoinIdentity{OP}}) where OP =
+    x
+(::AdjoinIdentity{OP})(::SpecificInitialValue{AdjoinIdentity{OP}},
+                       x::SpecificInitialValue{AdjoinIdentity{OP}}) where OP = x
+hasinitialvalue(::AdjoinIdentity) = true
 
 end # module

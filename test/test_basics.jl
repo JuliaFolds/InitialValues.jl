@@ -67,4 +67,15 @@ end
     @test convert(String, Init(*)) === ""
 end
 
+@testset "asmonoid" begin
+    absmin = asmonoid() do a, b
+        abs(a) < abs(b) ? a : b
+    end
+    @test absmin(Init(absmin), Inf) === Inf
+    @test absmin(missing, Init(absmin)) === missing
+    @test absmin(Init(absmin), Init(absmin)) === Init(absmin)
+
+    @test asmonoid(+) === +
+end
+
 end  # module
