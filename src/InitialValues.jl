@@ -244,6 +244,9 @@ and return the monoid `op′`.
 ```jldoctest
 julia> using InitialValues
 
+julia> asmonoid(*) === *  # do nothing if `Init` is already defined
+true
+
 julia> append!′ = asmonoid(append!);
 
 julia> xs = [];
