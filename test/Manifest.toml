@@ -10,11 +10,11 @@ version = "0.4.0"
 
 [[BangBang]]
 deps = ["Compat", "ConstructionBase", "Future", "InitialValues", "LinearAlgebra", "Requires", "Setfield", "Tables", "ZygoteRules"]
-git-tree-sha1 = "f1f21f011d27251237e8bcc4d07319d5cf9fc2ea"
+git-tree-sha1 = "b4dd6b1e37cf82a933cedd1d7a2fd7506caec3ec"
 repo-rev = "master"
 repo-url = "https://github.com/tkf/BangBang.jl"
 uuid = "198e06fe-97b7-11e9-32a5-e1d131e6ad66"
-version = "0.3.8-DEV"
+version = "0.3.9-DEV"
 
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -125,10 +125,10 @@ deps = ["Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[Requires]]
-deps = ["Test"]
-git-tree-sha1 = "f6fbf4ba64d295e146e49e021207993b6b48c7d1"
+deps = ["UUIDs"]
+git-tree-sha1 = "999513b7dea8ac17359ed50ae8ea089e4464e35e"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
-version = "0.5.2"
+version = "1.0.0"
 
 [[SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
