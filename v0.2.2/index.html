@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · InitialValues.jl</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">InitialValues.jl</span></div><form class="docs-search" action="search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li class="is-active"><a class="tocitem" href>Home</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Home</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Home</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/tkf/InitialValues.jl/blob/master/docs/src/index.md#L" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="InitialValues.jl-1"><a class="docs-heading-anchor" href="#InitialValues.jl-1">InitialValues.jl</a><a class="docs-heading-anchor-permalink" href="#InitialValues.jl-1" title="Permalink"></a></h1><ul><li><a href="#InitialValues"><code>InitialValues</code></a></li><li><a href="#InitialValues.InitialValue"><code>InitialValues.InitialValue</code></a></li><li><a href="#InitialValues.Init"><code>InitialValues.Init</code></a></li><li><a href="#InitialValues.asmonoid"><code>InitialValues.asmonoid</code></a></li><li><a href="#InitialValues.hasinitialvalue"><code>InitialValues.hasinitialvalue</code></a></li><li><a href="#InitialValues.isknown"><code>InitialValues.isknown</code></a></li><li><a href="#InitialValues.@def"><code>InitialValues.@def</code></a></li><li><a href="#InitialValues.@def_monoid"><code>InitialValues.@def_monoid</code></a></li><li><a href="#InitialValues.@disambiguate"><code>InitialValues.@disambiguate</code></a></li></ul><article class="docstring"><header><a class="docstring-binding" id="InitialValues" href="#InitialValues"><code>InitialValues</code></a> — <span class="docstring-category">Module</span></header><section><div><p><strong>InitialValues.jl: Canonical default initial values and identity elements for Julia</strong></p><p><a href="https://tkf.github.io/InitialValues.jl/stable"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Stable"/></a> <a href="https://tkf.github.io/InitialValues.jl/dev"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Dev"/></a> <a href="https://travis-ci.com/tkf/InitialValues.jl"><img src="https://travis-ci.com/tkf/InitialValues.jl.svg?branch=master" alt="Build Status"/></a> <a href="https://codecov.io/gh/tkf/InitialValues.jl"><img src="https://codecov.io/gh/tkf/InitialValues.jl/branch/master/graph/badge.svg" alt="Codecov"/></a> <a href="https://coveralls.io/github/tkf/InitialValues.jl?branch=master"><img src="https://coveralls.io/repos/github/tkf/InitialValues.jl/badge.svg?branch=master" alt="Coveralls"/></a> <a href="https://github.com/tkf/Aqua.jl"><img src="https://img.shields.io/badge/Aqua.jl-%F0%9F%8C%A2-aqua.svg" alt="Aqua QA"/></a></p><p>InitialValues.jl provides a generic singleton initial value <code>Init(f)</code> that can be used as <code>a₀</code> in <code>f(a₀, x)</code>.  For a binary operator <code>op</code>, it means that <code>Init(op)</code> acts like the identity for <em>any</em> type of <code>x</code>:</p><pre><code class="language-julia-repl">julia&gt; using InitialValues
+
+julia&gt; Init(+) + 1
+1
+
+julia&gt; 1.0 + Init(+)
+1.0
+
+julia&gt; foldl(+, 1:3, init=Init(+))
+6</code></pre><p>Following methods are defined for the binary operators in <code>Base</code>:</p><pre><code class="language-julia-repl">julia&gt; Init(*) * 1
+1
+
+julia&gt; Init(&amp;) &amp; 1
+1
+
+julia&gt; Init(|) | 1
+1
+
+julia&gt; min(Init(min), 1)
+1
+
+julia&gt; max(Init(max), 1)
+1
+
+julia&gt; Base.add_sum(Init(Base.add_sum), 1)
+1
+
+julia&gt; Base.mul_prod(Init(Base.mul_prod), 1)
+1</code></pre><p><code>Init</code> is not called <code>Identity</code> because it is useful to define it for functions that are not binary operator (symmetric in signature).  For example, <code>push!!</code> in <a href="https://github.com/tkf/BangBang.jl">BangBang.jl</a> defines</p><pre><code class="language-julia">julia&gt; using BangBang
+
+julia&gt; push!!(Init(push!!), 1)
+1-element Array{Int64,1}:
+ 1</code></pre><p>This provides a powerful pattern when combined with <code>foldl</code>:</p><pre><code class="language-julia">julia&gt; foldl(push!!, (1, missing, 2.0), init=Init(push!!))
+3-element Array{Union{Missing, Float64},1}:
+ 1.0
+  missing
+ 2.0</code></pre><p><a href="https://github.com/tkf/Transducers.jl">Transducers.jl</a> extensively uses <code>Init</code>.</p><p>As binary operators like <code>*</code> in <code>Base</code> are heavily overloaded, creating generic definitions such as above could have introduced method ambiguities.  To protect against such situation, InitialValues.jl is tested using <a href="https://github.com/tkf/Aqua.jl">Aqua.jl</a>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/tkf/InitialValues.jl/blob/383e7250f2d6766a01197eaf70eb5056e20c3b86/src/InitialValues.jl#LL4-L86">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="InitialValues.Init" href="#InitialValues.Init"><code>InitialValues.Init</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">Init(op) :: InitialValue</code></pre><p>Create a generic (left) identity for a binary operator <code>op</code>.  For general binary function, it provides an identity-like generic default value (see <code>BangBang.push!!</code>).</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl">julia&gt; using InitialValues
+
+julia&gt; Init(*) isa InitialValues.InitialValue
+true
+
+julia&gt; Init(*) * 1
+1
+
+julia&gt; Init(*) * missing
+missing
+
+julia&gt; Init(*) * &quot;right&quot;
+&quot;right&quot;
+
+julia&gt; Init(*) * :actual_anything_works
+:actual_anything_works
+
+julia&gt; foldl(+, 1:3, init=Init(+))
+6
+
+julia&gt; float(Init(*))
+1.0
+
+julia&gt; Integer(Init(+))
+0</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/tkf/InitialValues.jl/blob/383e7250f2d6766a01197eaf70eb5056e20c3b86/src/InitialValues.jl#LL11-L46">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="InitialValues.@def" href="#InitialValues.@def"><code>InitialValues.@def</code></a> — <span class="docstring-category">Macro</span></header><section><div><pre><code class="language-julia">InitialValues.@def op [y = :x]</code></pre><p>Define a generic (left) identity for a binary operator <code>op</code>.  Specify the second argument for a binary function in general.</p><p><code>InitialValues.@def op</code> is expanded to</p><pre><code class="language-julia">op(::SpecificInitialValue{typeof(op)}, x) = x
+InitialValues.hasinitialvalue(::Type{typeof(op)}) = true</code></pre><p>For operations like <code>push!</code>, it is useful to define the returned value to be different from <code>x</code>.  This can be done by using the second argument to the maco; i.e., <code>InitialValues.@def push! [x]</code> is expanded to</p><pre><code class="language-julia">push!(::SpecificInitialValue{typeof(push!)}, x) = [x]
+InitialValues.hasinitialvalue(::Type{typeof(push!)}) = true</code></pre><p>Note that the second argument to <code>op</code> is always <code>x</code>.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/tkf/InitialValues.jl/blob/383e7250f2d6766a01197eaf70eb5056e20c3b86/src/InitialValues.jl#LL133-L154">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="InitialValues.@def_monoid" href="#InitialValues.@def_monoid"><code>InitialValues.@def_monoid</code></a> — <span class="docstring-category">Macro</span></header><section><div><pre><code class="language-julia">InitialValues.@def_monoid op</code></pre><p>Define a generic identity for a binary operator <code>op</code>. <code>InitialValues.@def_monoid op</code> is expanded to</p><pre><code class="language-julia">op(::SpecificInitialValue{typeof(op)}, x::SpecificInitialValue{typeof(op)}) = x
+op(x, ::SpecificInitialValue{typeof(op)}) = x
+op(::SpecificInitialValue{typeof(op)}, x) = x
+InitialValues.hasinitialvalue(::Type{typeof(op)}) = true</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/tkf/InitialValues.jl/blob/383e7250f2d6766a01197eaf70eb5056e20c3b86/src/InitialValues.jl#LL159-L168">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="InitialValues.@disambiguate" href="#InitialValues.@disambiguate"><code>InitialValues.@disambiguate</code></a> — <span class="docstring-category">Macro</span></header><section><div><pre><code class="language-julia">InitialValues.@disambiguate op OtherType</code></pre><p>Disambiguate the method introduced by <a href="#InitialValues.@def_monoid"><code>@def_monoid</code></a>.</p><p>It is expanded to</p><pre><code class="language-julia">op(::SpecificInitialValue{typeof(op)}, x::OtherType) = x
+op(x::OtherType, ::SpecificInitialValue{typeof(op)}) = x</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/tkf/InitialValues.jl/blob/383e7250f2d6766a01197eaf70eb5056e20c3b86/src/InitialValues.jl#LL179-L189">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="InitialValues.hasinitialvalue" href="#InitialValues.hasinitialvalue"><code>InitialValues.hasinitialvalue</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">InitialValues.hasinitialvalue(op) :: Bool</code></pre><p><strong>Examples</strong></p><pre><code class="language-julia-repl">julia&gt; using InitialValues
+
+julia&gt; all(InitialValues.hasinitialvalue, [
+           *,
+           +,
+           &amp;,
+           |,
+           min,
+           max,
+           Base.add_sum,
+           Base.mul_prod,
+       ])
+true
+
+julia&gt; InitialValues.hasinitialvalue((x, y) -&gt; x + y)
+false</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/tkf/InitialValues.jl/blob/383e7250f2d6766a01197eaf70eb5056e20c3b86/src/InitialValues.jl#LL78-L100">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="InitialValues.isknown" href="#InitialValues.isknown"><code>InitialValues.isknown</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">InitialValues.isknown(::InitialValue) :: Bool</code></pre><p><strong>Examples</strong></p><pre><code class="language-julia-repl">julia&gt; using InitialValues
+
+julia&gt; InitialValues.isknown(Init(+))
+true
+
+julia&gt; InitialValues.isknown(Init((x, y) -&gt; x + y))
+false</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/tkf/InitialValues.jl/blob/383e7250f2d6766a01197eaf70eb5056e20c3b86/src/InitialValues.jl#LL104-L117">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="InitialValues.InitialValue" href="#InitialValues.InitialValue"><code>InitialValues.InitialValue</code></a> — <span class="docstring-category">Type</span></header><section><div><pre><code class="language-julia">InitialValues.InitialValue</code></pre><p>An abstract super type of all generic initial value types.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/tkf/InitialValues.jl/blob/383e7250f2d6766a01197eaf70eb5056e20c3b86/src/InitialValues.jl#LL51-L55">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="InitialValues.asmonoid" href="#InitialValues.asmonoid"><code>InitialValues.asmonoid</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">asmonoid(op) -&gt; op′</code></pre><p>&quot;Add&quot; (adjoin) an identity element to the semigroup <code>op</code> if necessary and return the monoid <code>op′</code>.</p><p><strong>Examples</strong></p><pre><code class="language-julia-repl">julia&gt; using InitialValues
+
+julia&gt; asmonoid(*) === *  # do nothing if `Init` is already defined
+true
+
+julia&gt; append!′ = asmonoid(append!);
+
+julia&gt; xs = [];
+
+julia&gt; append!′(Init(append!′), xs) === xs
+true
+
+julia&gt; foldl(append!′, [xs, [1], [2, 3]], init=Init(append!′))
+3-element Array{Any,1}:
+ 1
+ 2
+ 3
+
+julia&gt; ans === xs  # `xs` is modified
+true</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/tkf/InitialValues.jl/blob/383e7250f2d6766a01197eaf70eb5056e20c3b86/src/InitialValues.jl#LL237-L266">source</a></section></article></article></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Wednesday 15 January 2020 11:26">Wednesday 15 January 2020</span>. Using Julia version 1.1.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
