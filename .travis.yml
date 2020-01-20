@@ -7,10 +7,6 @@ julia:
   - 1.0
   - 1.1
   - nightly
-matrix:
-  allow_failures:
-    - julia: nightly
-  fast_finish: true
 notifications:
   email: false
 
@@ -28,7 +24,11 @@ script:
   - julia -e 'using Run; Run.test(project="test/environments/main")'
 after_success:
   - julia -e 'using Run; Run.after_success_test()'
+
 jobs:
+  allow_failures:
+    - julia: nightly
+  fast_finish: true
   include:
     - stage: Documentation
       julia: 1.1
