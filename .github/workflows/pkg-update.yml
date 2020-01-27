@@ -31,7 +31,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
           commit-message: Update */Manifest.toml
           title: '[AUTO] Update */Manifest.toml'
           labels: no changelog
