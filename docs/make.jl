@@ -9,7 +9,7 @@ makedocs(;
     repo="https://github.com/tkf/InitialValues.jl/blob/{commit}{path}#L{line}",
     sitename="InitialValues.jl",
     authors="Takafumi Arakaki <aka.tkf@gmail.com>",
-    strict=VERSION < v"1.2-",
+    strict = true,
 )
 
 deploydocs(;

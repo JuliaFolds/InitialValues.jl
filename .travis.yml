@@ -4,8 +4,8 @@ os:
   - linux
   # - osx
 julia:
+  - 1.4
   - 1.0
-  - 1.1
   - nightly
 notifications:
   email: false
@@ -31,7 +31,6 @@ jobs:
   fast_finish: true
   include:
     - stage: Documentation
-      julia: 1.1
       install:
         - julia -e 'using Run; Run.prepare_docs()'
       script:
