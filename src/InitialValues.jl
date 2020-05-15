@@ -203,6 +203,8 @@ end
 @disambiguate Base.min Missing
 @disambiguate Base.max Missing
 
+Base.promote_rule(::Type{I}, ::Type{S}) where {I<:InitialValue,S} = Union{I,S}
+
 const ZeroType = Union{
     SpecificInitialValue{typeof(+)},
     SpecificInitialValue{typeof(Base.add_sum)},

@@ -12,4 +12,9 @@ using InitialValues: Init, hasinitialvalue
     @test append!!([1], Init(append!!)) == [1]
 end
 
+@testset "promote" begin
+    init = Init(+)
+    @test eltype(push!!([init], 0)) == Union{typeof(init),Int}
+end
+
 end  # module
