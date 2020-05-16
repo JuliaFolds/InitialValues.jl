@@ -4,8 +4,9 @@ using Test
 using InitialValues
 using InitialValues: isknown, hasinitialvalue
 
+OPS = [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
 
-@testset for op in [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
+@testset for op in OPS
     @test op(Init(op), :anything) === :anything
     @test hasinitialvalue(op)
     @test hasinitialvalue(typeof(op))
@@ -37,6 +38,13 @@ end
 @testset "missing" begin
     @test min(Init(min), missing) === missing
     @test max(Init(max), missing) === missing
+end
+
+@testset "promote" begin
+    for op in OPS
+        T = typeof(Init(op))
+        @test promote_type(T, Val{0}) == Union{T,Val{0}}
+    end
 end
 
 @testset "convert" begin
