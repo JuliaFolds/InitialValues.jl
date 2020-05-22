@@ -6,7 +6,7 @@ module InitialValues
     replace(read(path, String), r"^```julia"m => "```jldoctest README")
 end InitialValues
 
-export Init, asmonoid
+export INIT, Init, asmonoid
 
 """
     Init(op) :: InitialValue
@@ -55,9 +55,43 @@ An abstract super type of all generic initial value types.
 """
 abstract type InitialValue end
 abstract type SpecificInitialValue{OP} <: InitialValue end
-# abstract type GenericIdentity <: AbstractIdentity end
+abstract type NonspecificInitialValue <: InitialValue end
+
+struct TypeOfINIT <: NonspecificInitialValue end
+
+"""
+    INIT :: InitialValue
+
+A generic initial value.  Unlike [`Init`](@ref), this does not detect
+an error when `INIT` is used with unintended operations.
+
+# Examples
+```jldoctest
+julia> using InitialValues
+
+julia> Init(+) * 0  # `Init(op)` must be used with `op`
+ERROR: MethodError: no method matching *(::InitialValues.InitialValueOf{typeof(+)}, ::Int64)
+[...]
+
+julia> INIT * 123
+123
+
+julia> foldl(+, 1:3, init=INIT)
+6
+"""
+const INIT = TypeOfINIT()
+
+function Base.show(io::IO, ::TypeOfINIT) where {OP}
+    if !get(io, :limit, false)
+        # Don't show full name in REPL etc.:
+        print(io, "InitialValues.")
+    end
+    print(io, "INIT")
+end
 
 struct InitialValueOf{OP} <: SpecificInitialValue{OP} end
+
+const GenericInitialValue{OP} = Union{SpecificInitialValue{OP},NonspecificInitialValue}
 
 function Base.show(io::IO, ::InitialValueOf{OP}) where {OP}
     if !get(io, :limit, false)
@@ -72,7 +106,7 @@ function Base.show(io::IO, ::InitialValueOf{OP}) where {OP}
     end
 end
 
-itypeof_impl(op) = :(SpecificInitialValue{typeof($op)})
+itypeof_impl(op) = :(GenericInitialValue{typeof($op)})
 @eval itypeof(op) = $(itypeof_impl(:op))
 
 """
