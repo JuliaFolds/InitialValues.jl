@@ -238,6 +238,9 @@ end
 @disambiguate Base.max Missing
 
 Base.promote_rule(::Type{I}, ::Type{S}) where {I<:InitialValue,S} = Union{I,S}
+if VERSION < v"1.3"
+    Base.promote_rule(::Type{I}, ::Type{Any}) where {I<:InitialValue} = Any
+end
 
 const ZeroType = Union{
     SpecificInitialValue{typeof(+)},
