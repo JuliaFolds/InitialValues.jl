@@ -8,6 +8,9 @@ OPS = [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
 
 @testset for op in OPS
     @test op(Init(op), :anything) === :anything
+    @test op(:anything, Init(op)) === :anything
+    @test op(INIT, :anything) === :anything
+    @test op(:anything, INIT) === :anything
     @test hasinitialvalue(op)
     @test hasinitialvalue(typeof(op))
     @test isknown(Init(op))
@@ -25,6 +28,11 @@ end
         @test repr(Init(op); context=:limit => true) == desired
         @test repr(Init(op)) == "InitialValues.$desired"
         @test string(Init(op)) == "InitialValues.$desired"
+    end
+    @testset "INIT" begin
+        @test repr(INIT; context=:limit => true) == "INIT"
+        @test repr(INIT) == "InitialValues.INIT"
+        @test string(INIT) == "InitialValues.INIT"
     end
 end
 

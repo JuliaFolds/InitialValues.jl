@@ -6,6 +6,7 @@
 ```@docs
 InitialValues
 InitialValues.Init
+InitialValues.INIT
 InitialValues.@def
 InitialValues.@def_monoid
 InitialValues.@disambiguate
