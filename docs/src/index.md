@@ -14,4 +14,7 @@ InitialValues.hasinitialvalue
 InitialValues.isknown
 InitialValues.InitialValue
 InitialValues.asmonoid
+InitialValues.Initializer
+InitialValues.initialize
+InitialValues.SomeInit
 ```
