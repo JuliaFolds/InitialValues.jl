@@ -42,6 +42,10 @@ end
         @test repr(Init; context=:limit => true) == "Init"
         @test repr(Init) == "InitialValues.Init"
         @test string(Init) == "InitialValues.Init"
+        @test sprint(show, "text/plain", Init; context = :limit => true) == "Init"
+        @test sprint(show, "text/plain", Init; context = :limit => false) == sprint() do io
+            invoke(show, Tuple{IO,MIME"text/plain",Function}, io, MIME"text/plain"(), Init)
+        end
     end
     @testset "INIT" begin
         @test repr(INIT; context=:limit => true) == "INIT"
