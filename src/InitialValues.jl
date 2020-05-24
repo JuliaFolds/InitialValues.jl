@@ -450,15 +450,16 @@ asmonoid(op) = hasinitialvalue(op) ? op : AdjoinIdentity(op)
 hasinitialvalue(::Type{AdjoinIdentity{T}}) where {T} = true
 
 """
-    adjoininit(op) -> op′
+    adjoininit(rf) -> rf′
 
-Transform a binary function `op` to a function `op′` such that
-`hasinitialvalue(op′) === true`.  Do nothing if `op` already has a
+Transform a binary function `rf` (aka reducing function) to a function
+`rf′` that has an initial value; i.e., `rf′(Init(rf′), x) === x` and
+`hasinitialvalue(rf′) === true`.  Do nothing if `rf` already has a
 known initial value.
 
 This is equivalent to [`asmonoid`](@ref) by default.  Frameworks for
-composing `op` (e.g., Transducers.jl) may overload this function such
-that `op′` itself is not a monoid.
+composing `rf` (e.g., Transducers.jl) may overload this function such
+that `rf′` itself is not a monoid.
 
 # Examples
 ```jldoctest
@@ -484,6 +485,6 @@ julia> ans === xs  # `xs` is modified
 true
 ```
 """
-adjoininit(op) = asmonoid(op)
+adjoininit(rf) = asmonoid(rf)
 
 end # module
