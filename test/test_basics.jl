@@ -2,27 +2,18 @@ module TestBasics
 
 using Test
 using InitialValues
-using InitialValues:
-    InitOf, SpecificInitialValue, UndefinedInitialValueError, hasinitialvalue, isknown
-
-struct CustomInitOf{OP} <: SpecificInitialValue{OP} end
-const CustomInit = InitOf{CustomInitOf}()
+using InitialValues: isknown, hasinitialvalue
 
 OPS = [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
 
 @testset for op in OPS
     @test op(Init(op), :anything) === :anything
     @test op(:anything, Init(op)) === :anything
-    @test op(CustomInit(op), :anything) === :anything
-    @test op(:anything, CustomInit(op)) === :anything
     @test op(INIT, :anything) === :anything
     @test op(:anything, INIT) === :anything
     @test hasinitialvalue(op)
     @test hasinitialvalue(typeof(op))
     @test isknown(Init(op))
-    @test isknown(CustomInit(op))
-    @test initialize(Init, op) === Init(op)
-    @test initialize(CustomInit, op) === CustomInitOf{typeof(op)}()
 end
 
 @testset "show" begin
@@ -37,15 +28,6 @@ end
         @test repr(Init(op); context=:limit => true) == desired
         @test repr(Init(op)) == "InitialValues.$desired"
         @test string(Init(op)) == "InitialValues.$desired"
-    end
-    @testset "Init" begin
-        @test repr(Init; context=:limit => true) == "Init"
-        @test repr(Init) == "InitialValues.Init"
-        @test string(Init) == "InitialValues.Init"
-        @test sprint(show, "text/plain", Init; context = :limit => true) == "Init"
-        @test sprint(show, "text/plain", Init; context = :limit => false) == sprint() do io
-            invoke(show, Tuple{IO,MIME"text/plain",Function}, io, MIME"text/plain"(), Init)
-        end
     end
     @testset "INIT" begin
         @test repr(INIT; context=:limit => true) == "INIT"
@@ -64,8 +46,6 @@ end
 @testset "missing" begin
     @test min(Init(min), missing) === missing
     @test max(Init(max), missing) === missing
-    @test min(CustomInit(min), missing) === missing
-    @test max(CustomInit(max), missing) === missing
 end
 
 @testset "promote" begin
@@ -115,45 +95,6 @@ end
     @test isknown(Init(absmin))
 
     @test asmonoid(+) === +
-end
-
-@testset "initialize" begin
-    @test initialize(123, nothing) === 123
-    @test_throws UndefinedInitialValueError initialize(Init, nothing)
-end
-
-@testset "UndefinedInitialValueError" begin
-    @testset "Init" begin
-        err = try
-            initialize(Init, nothing)
-            nothing
-        catch err′
-            err′
-        end
-        @test err isa UndefinedInitialValueError
-        msg = sprint(showerror, err)
-        @test occursin("`Init(op)` is not defined", msg)
-        @test occursin("op = nothing", msg)
-        @test !occursin("Additional information:", msg)
-    end
-    @testset "CustomInit" begin
-        err = try
-            initialize(CustomInit, nothing)
-            nothing
-        catch err′
-            err′
-        end
-        @test err isa UndefinedInitialValueError
-        msg = sprint(showerror, err)
-        @test occursin("`Init(op)` is not defined", msg)
-        @test occursin("op = nothing", msg)
-        @test occursin("Additional information:", msg)
-    end
-end
-
-@testset "SomeInit" begin
-    @test initialize(SomeInit(123), +) === 123
-    @test initialize(SomeInit(Init), +) === Init
 end
 
 end  # module
