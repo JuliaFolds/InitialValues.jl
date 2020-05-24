@@ -78,6 +78,7 @@ julia> INIT * 123
 
 julia> foldl(+, 1:3, init=INIT)
 6
+```
 """
 const INIT = TypeOfINIT()
 
