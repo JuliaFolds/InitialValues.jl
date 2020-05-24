@@ -315,4 +315,8 @@ asmonoid(op) = hasinitialvalue(op) ? op : AdjoinIdentity(op)
                        x::SpecificInitialValue{AdjoinIdentity{OP}}) where OP = x
 hasinitialvalue(::Type{AdjoinIdentity{T}}) where {T} = true
 
+# Not used in Transducers.jl ATM but it is probably a reasonable thing
+# to support (see, e.g., `Base.BottomRF`):
+Base.reduce_empty(rf::AdjoinIdentity, T) = Base.reduce_empty(rf.op, T)
+
 end # module
