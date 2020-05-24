@@ -6,7 +6,7 @@ module InitialValues
     replace(read(path, String), r"^```julia"m => "```jldoctest README")
 end InitialValues
 
-export INIT, Init, SomeInit, asmonoid, initialize
+export INIT, Init, SomeInit, adjoininit, asmonoid, initialize
 
 """
     Init(op) :: InitialValue
@@ -424,7 +424,50 @@ julia> using InitialValues
 julia> asmonoid(*) === *  # do nothing if `Init` is already defined
 true
 
-julia> append!′ = asmonoid(append!);
+julia> vcat′ = asmonoid(vcat);
+
+julia> xs = [];
+
+julia> vcat′(Init(vcat′), xs) === xs
+true
+
+julia> foldl(vcat′, [xs, [1], [2, 3]], init=Init(vcat′))
+3-element Array{Any,1}:
+ 1
+ 2
+ 3
+```
+"""
+asmonoid(op) = hasinitialvalue(op) ? op : AdjoinIdentity(op)
+
+(sg::AdjoinIdentity)(x, y) = sg.op(x, y)
+(::AdjoinIdentity{OP})(::SpecificInitialValue{AdjoinIdentity{OP}}, x) where OP =
+    x
+(::AdjoinIdentity{OP})(x, ::SpecificInitialValue{AdjoinIdentity{OP}}) where OP =
+    x
+(::AdjoinIdentity{OP})(::SpecificInitialValue{AdjoinIdentity{OP}},
+                       x::SpecificInitialValue{AdjoinIdentity{OP}}) where OP = x
+hasinitialvalue(::Type{AdjoinIdentity{T}}) where {T} = true
+
+"""
+    adjoininit(op) -> op′
+
+Transform a binary function `op` to a function `op′` such that
+`hasinitialvalue(op′) === true`.  Do nothing if `op` already has a
+known initial value.
+
+This is equivalent to [`asmonoid`](@ref) by default.  Frameworks for
+composing `op` (e.g., Transducers.jl) may overload this function such
+that `op′` itself is not a monoid.
+
+# Examples
+```jldoctest
+julia> using InitialValues
+
+julia> adjoininit(*) === *  # do nothing if `Init` is already defined
+true
+
+julia> append!′ = adjoininit(append!);
 
 julia> xs = [];
 
@@ -441,15 +484,6 @@ julia> ans === xs  # `xs` is modified
 true
 ```
 """
-asmonoid(op) = hasinitialvalue(op) ? op : AdjoinIdentity(op)
-
-(sg::AdjoinIdentity)(x, y) = sg.op(x, y)
-(::AdjoinIdentity{OP})(::SpecificInitialValue{AdjoinIdentity{OP}}, x) where OP =
-    x
-(::AdjoinIdentity{OP})(x, ::SpecificInitialValue{AdjoinIdentity{OP}}) where OP =
-    x
-(::AdjoinIdentity{OP})(::SpecificInitialValue{AdjoinIdentity{OP}},
-                       x::SpecificInitialValue{AdjoinIdentity{OP}}) where OP = x
-hasinitialvalue(::Type{AdjoinIdentity{T}}) where {T} = true
+adjoininit(op) = asmonoid(op)
 
 end # module

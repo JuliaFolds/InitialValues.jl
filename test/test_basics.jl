@@ -114,7 +114,10 @@ end
     @test hasinitialvalue(typeof(absmin))
     @test isknown(Init(absmin))
 
-    @test asmonoid(+) === +
+    @test asmonoid(absmin) === absmin
+    @test adjoininit(absmin.op) === adjoininit(absmin) === absmin
+    @test asmonoid(nothing) === adjoininit(nothing) !== nothing
+    @test asmonoid(+) === adjoininit(+) === +
 end
 
 @testset "initialize" begin
