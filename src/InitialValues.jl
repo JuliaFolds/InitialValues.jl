@@ -234,6 +234,8 @@ function Base.show(io::IO, ::InitOf{InitialValueOf})
     print(io, "Init")
 end
 
+# Workaround default dispatch through `Function`:
+Base.print(io::IO, init::InitOf) = show(io, init)
 function Base.show(io::IO, ::MIME"text/plain", init::InitOf)
     if !get(io, :limit, false)
         invoke(show, Tuple{IO,MIME"text/plain",Function}, io, MIME"text/plain"(), init)
