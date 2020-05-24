@@ -312,6 +312,6 @@ asmonoid(op) = hasinitialvalue(op) ? op : AdjoinIdentity(op)
     x
 (::AdjoinIdentity{OP})(::SpecificInitialValue{AdjoinIdentity{OP}},
                        x::SpecificInitialValue{AdjoinIdentity{OP}}) where OP = x
-hasinitialvalue(::AdjoinIdentity) = true
+hasinitialvalue(::Type{AdjoinIdentity{T}}) where {T} = true
 
 end # module
