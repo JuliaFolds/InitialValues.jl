@@ -13,6 +13,7 @@ InitialValues.@disambiguate
 InitialValues.hasinitialvalue
 InitialValues.isknown
 InitialValues.InitialValue
+InitialValues.adjoininit
 InitialValues.asmonoid
 InitialValues.Initializer
 InitialValues.initialize
