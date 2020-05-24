@@ -6,7 +6,7 @@ module InitialValues
     replace(read(path, String), r"^```julia"m => "```jldoctest README")
 end InitialValues
 
-export INIT, Init, asmonoid
+export INIT, Init, SomeInit, asmonoid, initialize
 
 """
     Init(op) :: InitialValue
@@ -44,7 +44,7 @@ julia> Integer(Init(+))
 0
 ```
 """
-Init(::OP) where OP = InitialValueOf{OP}()
+Init
 
 include("prettyexpr.jl")
 
@@ -56,6 +56,96 @@ An abstract super type of all generic initial value types.
 abstract type InitialValue end
 abstract type SpecificInitialValue{OP} <: InitialValue end
 abstract type NonspecificInitialValue <: InitialValue end
+
+"""
+    InitialValues.Initializer <: Function
+
+An `Initializer` object is a callable object `f` such that `f(op)`
+produces an initial value for `op`.  The initial value returned by `f`
+can be a "concrete" initial value instead of an `InitialValue`.
+
+[`Init`](@ref) is an example of an initializer.
+
+# Examples
+```jldoctest
+julia> using InitialValues
+
+julia> Init isa InitialValues.Initializer
+true
+
+julia> SomeInit(0) isa InitialValues.Initializer
+true
+```
+"""
+Initializer
+abstract type Initializer <: Function end
+struct InitOf{IV <: InitialValue} <: Initializer end
+(::InitOf{IV})(::OP) where {IV, OP} = IV{OP}()
+
+initialize(f::Initializer, op) = check_init(f(op), f, op)
+initialize(init, _) = init
+
+check_init(init, f, op) = (_check_init(init, f, op); init)
+_check_init(_, _, _) = nothing
+_check_init(init::SpecificInitialValue, f::Initializer, op) =
+    isknown(init) || throw(UndefinedInitialValueError(f, op))
+
+# Maybe parameterized by `initializer` type so that each initializer
+# can creates specific error message?
+struct UndefinedInitialValueError <: Exception
+    initializer
+    op
+end
+
+function Base.showerror(io::IO, e::UndefinedInitialValueError)
+    initializer = e.initializer
+    op = e.op
+    additional_info = initializer === Init ? "" : """
+
+    Additional information:
+        Init = $(repr(initializer; context = io))
+    """
+    print(io, "UndefinedInitialValueError: ")
+    print(io, strip("""
+    Default initial value `Init(op)` is not defined for the binary function
+        op = $(repr(op; context = io))
+    Note that `op` must be a well known binary operations like `+` or `*`.
+    See InitialValues.jl documentation for more information.
+
+    This error can typically be avoided by providing the an initial value or
+    the identity element (e.g., keyword argument `init` for `reduce`).
+    $additional_info"""))
+end
+
+"""
+    initialize(f::Initializer, op) -> f(op)
+    initialize(init, _) -> init
+
+Return an initial value for `op`.  Throw an error if `f(op)` creates unknown
+initial value.
+
+# Examples
+```jldoctest
+julia> using InitialValues
+
+julia> initialize(Init, +)
+Init(+)
+
+julia> initialize(123, +)
+123
+
+julia> initialize(SomeInit(Init), +)  # wrap with `SomeInit` to skip `initialize`
+Init
+
+julia> unknown_op(x, y) = x + 2y;
+
+julia> InitialValues.initialize(Init, unknown_op)
+ERROR: UndefinedInitialValueError: Default initial value `Init(op)` is not defined for the binary function
+    op = unknown_op
+[...]
+```
+"""
+initialize
 
 struct TypeOfINIT <: NonspecificInitialValue end
 
@@ -105,6 +195,53 @@ function Base.show(io::IO, ::InitialValueOf{OP}) where {OP}
     else
         print(io, "Init(::", op, ")")
     end
+end
+
+const Init = InitOf{InitialValueOf}()
+
+"""
+    SomeInit(x) :: Initializer
+
+`SomeInit(x)` creates an [`Initializer`](@ref).  Like `Some` guard against
+`something` (i.e., `something(Some(x)) === x`), `SomeInit` guard against
+`initialize` (i.e., `initialize(SomeInit(x), _) === x`).
+
+# Examples
+```jldoctest
+julia> using InitialValues
+
+julia> SomeInit(123)(+)
+123
+
+julia> initialize(SomeInit(123), +)
+123
+
+julia> initialize(SomeInit(Init), +)  # avoid calling `Init(+)`
+Init
+```
+"""
+SomeInit
+struct SomeInit{T} <: Initializer
+    value::T
+end
+(init::SomeInit)(_) = init.value
+
+function Base.show(io::IO, ::InitOf{InitialValueOf})
+    if !get(io, :limit, false)
+        # Don't show full name in REPL etc.:
+        print(io, "InitialValues.")
+    end
+    print(io, "Init")
+end
+
+# Workaround default dispatch through `Function`:
+Base.print(io::IO, init::InitOf) = show(io, init)
+function Base.show(io::IO, ::MIME"text/plain", init::InitOf)
+    if !get(io, :limit, false)
+        invoke(show, Tuple{IO,MIME"text/plain",Function}, io, MIME"text/plain"(), init)
+        return
+    end
+    show(io, init)
 end
 
 itypeof_impl(op) = :(GenericInitialValue{typeof($op)})
