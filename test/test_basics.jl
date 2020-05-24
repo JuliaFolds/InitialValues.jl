@@ -90,6 +90,9 @@ end
     @test absmin(Init(absmin), Inf) === Inf
     @test absmin(missing, Init(absmin)) === missing
     @test absmin(Init(absmin), Init(absmin)) === Init(absmin)
+    @test hasinitialvalue(absmin)
+    @test hasinitialvalue(typeof(absmin))
+    @test isknown(Init(absmin))
 
     @test asmonoid(+) === +
 end
