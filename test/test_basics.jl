@@ -90,8 +90,16 @@ end
     @test absmin(Init(absmin), Inf) === Inf
     @test absmin(missing, Init(absmin)) === missing
     @test absmin(Init(absmin), Init(absmin)) === Init(absmin)
+    @test hasinitialvalue(absmin)
+    @test hasinitialvalue(typeof(absmin))
+    @test isknown(Init(absmin))
 
     @test asmonoid(+) === +
+
+    add = InitialValues.AdjoinIdentity(+)
+    @test add !== (+)
+    @test Base.reduce_empty(add, Int) == 0
+    @test_throws ArgumentError Base.reduce_empty(absmin, Int)
 end
 
 end  # module

@@ -78,6 +78,7 @@ julia> INIT * 123
 
 julia> foldl(+, 1:3, init=INIT)
 6
+```
 """
 const INIT = TypeOfINIT()
 
@@ -312,6 +313,10 @@ asmonoid(op) = hasinitialvalue(op) ? op : AdjoinIdentity(op)
     x
 (::AdjoinIdentity{OP})(::SpecificInitialValue{AdjoinIdentity{OP}},
                        x::SpecificInitialValue{AdjoinIdentity{OP}}) where OP = x
-hasinitialvalue(::AdjoinIdentity) = true
+hasinitialvalue(::Type{AdjoinIdentity{T}}) where {T} = true
+
+# Not used in Transducers.jl ATM but it is probably a reasonable thing
+# to support (see, e.g., `Base.BottomRF`):
+Base.reduce_empty(rf::AdjoinIdentity, T) = Base.reduce_empty(rf.op, T)
 
 end # module
