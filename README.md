@@ -1,7 +1,7 @@
 # InitialValues.jl: Canonical default initial values and identity elements for Julia
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://tkf.github.io/InitialValues.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://tkf.github.io/InitialValues.jl/dev)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliafolds.github.io/InitialValues.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliafolds.github.io/InitialValues.jl/dev)
 [![Build Status](https://travis-ci.com/JuliaFolds/InitialValues.jl.svg?branch=master)](https://travis-ci.com/JuliaFolds/InitialValues.jl)
 [![Codecov](https://codecov.io/gh/JuliaFolds/InitialValues.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaFolds/InitialValues.jl)
 [![Coveralls](https://coveralls.io/repos/github/JuliaFolds/InitialValues.jl/badge.svg?branch=master)](https://coveralls.io/github/JuliaFolds/InitialValues.jl?branch=master)
