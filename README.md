@@ -1,10 +1,10 @@
 # InitialValues.jl: Canonical default initial values and identity elements for Julia
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://tkf.github.io/InitialValues.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://tkf.github.io/InitialValues.jl/dev)
-[![Build Status](https://travis-ci.com/tkf/InitialValues.jl.svg?branch=master)](https://travis-ci.com/tkf/InitialValues.jl)
-[![Codecov](https://codecov.io/gh/tkf/InitialValues.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/tkf/InitialValues.jl)
-[![Coveralls](https://coveralls.io/repos/github/tkf/InitialValues.jl/badge.svg?branch=master)](https://coveralls.io/github/tkf/InitialValues.jl?branch=master)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliafolds.github.io/InitialValues.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliafolds.github.io/InitialValues.jl/dev)
+[![Build Status](https://travis-ci.com/JuliaFolds/InitialValues.jl.svg?branch=master)](https://travis-ci.com/JuliaFolds/InitialValues.jl)
+[![Codecov](https://codecov.io/gh/JuliaFolds/InitialValues.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaFolds/InitialValues.jl)
+[![Coveralls](https://coveralls.io/repos/github/JuliaFolds/InitialValues.jl/badge.svg?branch=master)](https://coveralls.io/github/JuliaFolds/InitialValues.jl?branch=master)
 [![Aqua QA](https://img.shields.io/badge/Aqua.jl-%F0%9F%8C%A2-aqua.svg)](https://github.com/tkf/Aqua.jl)
 
 InitialValues.jl provides a generic singleton initial value `Init(f)`
