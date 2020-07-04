@@ -51,7 +51,7 @@ julia> Base.mul_prod(Init(Base.mul_prod), 1)
 
 `Init` is not called `Identity` because it is useful to define it for
 functions that are not binary operator (symmetric in signature).  For
-example, `push!!` in [BangBang.jl](https://github.com/tkf/BangBang.jl)
+example, `push!!` in [BangBang.jl](https://github.com/JuliaFolds/BangBang.jl)
 defines
 
 ``````julia
@@ -72,7 +72,7 @@ julia> foldl(push!!, (1, missing, 2.0), init=Init(push!!))
  2.0
 ``````
 
-[Transducers.jl](https://github.com/tkf/Transducers.jl) extensively
+[Transducers.jl](https://github.com/JuliaFolds/Transducers.jl) extensively
 uses `Init`.
 
 As binary operators like `*` in `Base` are heavily overloaded,
