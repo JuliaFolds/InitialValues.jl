@@ -25,7 +25,7 @@ value (see `BangBang.push!!`).
 ```jldoctest
 julia> using InitialValues
 
-julia> InitialValues(*) isa InitialValues.InitialValue
+julia> InitialValue(*) isa InitialValues.InitialValue
 true
 
 julia> InitialValue(*) * 1
