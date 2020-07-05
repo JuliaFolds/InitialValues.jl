@@ -6,10 +6,16 @@ module InitialValues
     replace(read(path, String), r"^```julia"m => "```jldoctest README")
 end InitialValues
 
-export INIT, Init, asmonoid
+export INIT, InitialValue, asmonoid
+
+include("prettyexpr.jl")
+
+abstract type InitialValue end
+abstract type SpecificInitialValue{OP} <: InitialValue end
+abstract type NonspecificInitialValue <: InitialValue end
 
 """
-    Init(op) :: InitialValue
+    InitialValue(OP)
 
 Create a generic (left) identity for a binary operator `op`.  For
 general binary function, it provides an identity-like generic default
@@ -19,57 +25,47 @@ value (see `BangBang.push!!`).
 ```jldoctest
 julia> using InitialValues
 
-julia> Init(*) isa InitialValues.InitialValue
+julia> InitialValues(*) isa InitialValues.InitialValue
 true
 
-julia> Init(*) * 1
+julia> InitialValue(*) * 1
 1
 
-julia> Init(*) * missing
+julia> InitialValue(*) * missing
 missing
 
-julia> Init(*) * "right"
+julia> InitialValue(*) * "right"
 "right"
 
-julia> Init(*) * :actual_anything_works
+julia> InitialValue(*) * :actual_anything_works
 :actual_anything_works
 
-julia> foldl(+, 1:3, init=Init(+))
+julia> foldl(+, 1:3, init=InitialValue(+))
 6
 
-julia> float(Init(*))
+julia> float(InitialValue(*))
 1.0
 
-julia> Integer(Init(+))
+julia> Integer(InitialValue(+))
 0
 ```
 """
-Init(::OP) where OP = InitialValueOf{OP}()
-
-include("prettyexpr.jl")
-
-"""
-    InitialValues.InitialValue
-
-An abstract super type of all generic initial value types.
-"""
-abstract type InitialValue end
-abstract type SpecificInitialValue{OP} <: InitialValue end
-abstract type NonspecificInitialValue <: InitialValue end
+InitialValue(::OP) where {OP} = InitialValueOf{OP}()
+@deprecate Init(op) InitialValue(op)
 
 struct TypeOfINIT <: NonspecificInitialValue end
 
 """
     INIT :: InitialValue
 
-A generic initial value.  Unlike [`Init`](@ref), this does not detect
+A generic initial value.  Unlike [`InitialValue`](@ref), this does not detect
 an error when `INIT` is used with unintended operations.
 
 # Examples
 ```jldoctest
 julia> using InitialValues
 
-julia> Init(+) * 0  # `Init(op)` must be used with `op`
+julia> InitialValue(+) * 0  # `InitialValue(op)` must be used with `op`
 ERROR: MethodError: no method matching *(::InitialValues.InitialValueOf{typeof(+)}, ::Int64)
 [...]
 
@@ -101,9 +97,9 @@ function Base.show(io::IO, ::InitialValueOf{OP}) where {OP}
     end
     op = string(OP)
     if startswith(op, "typeof(") && endswith(op, ")")
-        print(io, "Init(", op[length("typeof(") + 1 : end - length(")")], ")")
+        print(io, "InitialValue(", op[length("typeof(") + 1 : end - length(")")], ")")
     else
-        print(io, "Init(::", op, ")")
+        print(io, "InitialValue(::", op, ")")
     end
 end
 
@@ -143,10 +139,10 @@ hasinitialvalue(::Type) = false
 ```jldoctest
 julia> using InitialValues
 
-julia> InitialValues.isknown(Init(+))
+julia> InitialValues.isknown(InitialValue(+))
 true
 
-julia> InitialValues.isknown(Init((x, y) -> x + y))
+julia> InitialValues.isknown(InitialValue((x, y) -> x + y))
 false
 ```
 """
@@ -284,17 +280,17 @@ and return the monoid `op′`.
 ```jldoctest
 julia> using InitialValues
 
-julia> asmonoid(*) === *  # do nothing if `Init` is already defined
+julia> asmonoid(*) === *  # do nothing if `InitialValue` is already defined
 true
 
 julia> append!′ = asmonoid(append!);
 
 julia> xs = [];
 
-julia> append!′(Init(append!′), xs) === xs
+julia> append!′(InitialValue(append!′), xs) === xs
 true
 
-julia> foldl(append!′, [xs, [1], [2, 3]], init=Init(append!′))
+julia> foldl(append!′, [xs, [1], [2, 3]], init=InitialValue(append!′))
 3-element Array{Any,1}:
  1
  2
