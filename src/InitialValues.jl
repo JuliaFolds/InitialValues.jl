@@ -78,7 +78,7 @@ julia> foldl(+, 1:3, init=INIT)
 """
 const INIT = TypeOfINIT()
 
-function Base.show(io::IO, ::TypeOfINIT) where {OP}
+function Base.show(io::IO, ::TypeOfINIT)
     if !get(io, :limit, false)
         # Don't show full name in REPL etc.:
         print(io, "InitialValues.")
