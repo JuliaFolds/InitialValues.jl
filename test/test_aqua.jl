@@ -2,8 +2,9 @@ module TestAqua
 
 import Setfield
 using Aqua
-using InitialValues
 using BangBang
+using InitialValues
+using Test
 
 Aqua.test_all(InitialValues)
 
