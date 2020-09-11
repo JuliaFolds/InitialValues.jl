@@ -2,9 +2,11 @@
 
 [[Aqua]]
 deps = ["Pkg", "Test"]
-git-tree-sha1 = "2e62f20d7b710034082c82bf03129d208fc479ec"
+git-tree-sha1 = "8df6f7b8c94b8c1c7e620f83b71e49ac56787fc4"
+repo-rev = "master"
+repo-url = "https://github.com/JuliaTesting/Aqua.jl.git"
 uuid = "4c88cf16-eb10-579e-8560-4a9242c79595"
-version = "0.4.8"
+version = "0.4.9-DEV"
 
 [[BangBang]]
 deps = ["Compat", "ConstructionBase", "Future", "InitialValues", "LinearAlgebra", "Requires", "Setfield", "Tables", "ZygoteRules"]

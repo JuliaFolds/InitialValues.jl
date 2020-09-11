@@ -9,7 +9,8 @@ using Test
 Aqua.test_all(InitialValues)
 
 @testset "Test ambiguities with `BangBang`" begin
-    if VERSION >= v"1.6.0-DEV.816"
+    if v"1.6.0-DEV.816" <= VERSION < v"1.6.0-DEV.875"
+        # Maybe remove this branch?
         @warn "Ignoring ambiguities from `Base` to workaround JuliaLang/julia#36962"
         packages = [InitialValues, BangBang]
     else
