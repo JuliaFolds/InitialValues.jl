@@ -228,9 +228,11 @@ end
 @def_monoid Base.:|
 @def_monoid Base.min
 @def_monoid Base.max
+@def_monoid Base.union
 @def_monoid Base.add_sum
 @def_monoid Base.mul_prod
 
+@disambiguate Base.union BitSet
 @disambiguate Base.min Missing
 @disambiguate Base.max Missing
 
