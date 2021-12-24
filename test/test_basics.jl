@@ -96,9 +96,6 @@ end
 
     @test asmonoid(+) === +
 
-    add = InitialValues.AdjoinIdentity(+)
-    @test add !== (+)
-    @test Base.reduce_empty(add, Int) == 0
     @test_throws Union{ArgumentError,MethodError} Base.reduce_empty(absmin, Int)
 end
 
