@@ -9,6 +9,7 @@ end InitialValues
 export INIT, InitialValue, asmonoid
 
 include("prettyexpr.jl")
+include("broadcastable.jl")
 
 abstract type InitialValue end
 abstract type SpecificInitialValue{OP} <: InitialValue end
@@ -310,5 +311,7 @@ asmonoid(op) = hasinitialvalue(op) ? op : AdjoinIdentity(op)
 (::AdjoinIdentity{OP})(::SpecificInitialValue{AdjoinIdentity{OP}},
                        x::SpecificInitialValue{AdjoinIdentity{OP}}) where OP = x
 hasinitialvalue(::Type{AdjoinIdentity{T}}) where {T} = true
+
+Broadcast.broadcastable(init::InitialValue) = Singleton(init)
 
 end # module
