@@ -4,7 +4,7 @@ using Test
 using InitialValues
 using InitialValues: isknown, hasinitialvalue
 
-OPS = [*, +, |, &, min, max, Base.add_sum, Base.mul_prod]
+OPS = [*, +, |, &, min, max, Base.add_sum, Base.mul_prod, Base.union]
 
 @testset for op in OPS
     @test op(InitialValue(op), :anything) === :anything
